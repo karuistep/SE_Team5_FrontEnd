@@ -13,8 +13,6 @@ const Left = (props) => {
     }
   }, [props]);
 
-  console.log("problem: ", props.problem);
-
   return (
     <div
       className="left"
@@ -148,11 +146,11 @@ const Left = (props) => {
             테스트케이스 1이 들어갑니다.
           </div>
         </div>
-        <div className="testcase2" style={{ height: "99px" }}>
+        <div className="testcase2" style={{ height: "100px" }}>
           <div
             className="testcase2Header"
             style={{
-              height: "20px",
+              height: "21px",
               borderBottom: "1px solid #000000",
               paddingLeft: "30px",
               backgroundColor: "#FFD600",
@@ -172,7 +170,7 @@ const Left = (props) => {
           </div>
           <div
             style={{
-              height: "79px",
+              height: "80px",
               paddingTop: "5px",
               paddingLeft: "30px",
               boxSizing: "border-box",

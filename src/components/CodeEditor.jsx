@@ -1,15 +1,14 @@
-// import React from "react";
-// import ReactDOM from "react-dom";
-// import Editor from "@monaco-editor/react";
+import React from "react";
+import Editor from "@monaco-editor/react";
 
-// const CodeEditor = () => {
-//   return (
-//     <Editor
-//       height="90vh"
-//       defaultLanguage="javascript"
-//       defaultValue="// some comment"
-//     />
-//   );
-// };
+const CodeEditor = () => {
+  return (
+    <Editor
+      height="100%"
+      defaultLanguage="python"
+      defaultValue="// some comment"
+    />
+  );
+};
 
-// export default CodeEditor;
+export default CodeEditor;

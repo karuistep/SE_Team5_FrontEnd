@@ -15,9 +15,9 @@ import {
 } from "./api/api";
 
 function App() {
-  const [lecture, setLecture] = useState();
-  const [assignment, setAssignment] = useState();
-  const [problem, setProblem] = useState();
+  const [lecture, setLecture] = useState([]);
+  const [assignment, setAssignment] = useState([]);
+  const [problem, setProblem] = useState([]);
 
   useEffect(() => {
     getLecture()
@@ -30,7 +30,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (lecture != undefined) {
+    if (lecture !== undefined) {
       getAssignment(lecture.lecture_id)
         .then((res) => {
           setAssignment(res.data[0]);
@@ -42,7 +42,7 @@ function App() {
   }, [lecture]);
 
   useEffect(() => {
-    if (assignment != undefined) {
+    if (assignment !== undefined) {
       getProblems(lecture.lecture_id, assignment.assignment_id)
         .then((res) => {
           setProblem(res.data[0]);
@@ -52,17 +52,6 @@ function App() {
         });
     }
   }, [assignment]);
-
-  useEffect(() => {
-    console.log("problem: ", problem);
-    if (problem != undefined) {
-      getProblemDetail(0, problem.problem_id)
-        .then((res) => {})
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [problem]);
 
   return (
     <div className="inner" style={{ width: "1440px", margin: "auto" }}>

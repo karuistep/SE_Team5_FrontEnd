@@ -18,8 +18,6 @@ const Header = (props) => {
     }
   }, [props]);
 
-  console.log("assignment:", props.assignment);
-
   return (
     <div
       className="header"
