@@ -6,7 +6,19 @@ import FileCopyIcon from "@mui/icons-material/FileCopy";
 import SimCardDownloadIcon from "@mui/icons-material/SimCardDownload";
 import Button from "react-bootstrap/Button";
 
-const Center = () => {
+const Center = (props) => {
+  const handleExecuteCode = () => {
+    props.setRightSection(1);
+  };
+
+  const handleGradeCode = () => {
+    props.setRightSection(2);
+  };
+
+  const handleSubmitCode = () => {
+    props.setRightSection(3);
+  };
+
   return (
     <div
       className="center"
@@ -86,7 +98,7 @@ const Center = () => {
           backgroundColor: "#FFFFFF",
         }}
       >
-        <CodeEditor />
+        <CodeEditor code={props.code} setCode={props.setCode} />
       </div>
       <div
         className="centerFooter"
@@ -112,6 +124,7 @@ const Center = () => {
             paddingLeft: "15px",
             paddingRight: "15px",
           }}
+          onClick={handleExecuteCode}
         >
           실행
         </Button>
@@ -122,6 +135,7 @@ const Center = () => {
             paddingLeft: "15px",
             paddingRight: "15px",
           }}
+          onClick={handleGradeCode}
         >
           채점
         </Button>
@@ -132,6 +146,7 @@ const Center = () => {
             paddingLeft: "15px",
             paddingRight: "15px",
           }}
+          onClick={handleSubmitCode}
         >
           제출
         </Button>

@@ -1,22 +1,31 @@
 import HomeIcon from "@mui/icons-material/Home";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useState, useEffect } from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import dayjs from "dayjs";
 
 const Header = (props) => {
-  const [lectureTitle, setLectureTitle] = useState("강의제목");
-  const [assignmentTitle, setAssignmentTitle] = useState("과제명");
-  const [deadline, setdeadline] = useState("마감기한");
+  const [deadline, setDeadline] = useState("");
+
+  const handleChangeLecture = (event) => {
+    props.setSelectedLecture(event.target.value);
+  };
+
+  const handleChangeAssignment = (event) => {
+    props.setSelectedAssignment(event.target.value);
+  };
 
   useEffect(() => {
-    if (props.lecture != undefined) {
-      setLectureTitle(props.lecture.title);
+    if (
+      props.assignment !== undefined &&
+      props.assignment[props.selectedAssignment] !== undefined
+    ) {
+      setDeadline(props.assignment[props.selectedAssignment].deadline);
     }
-
-    if (props.assignment != undefined) {
-      setAssignmentTitle(props.assignment.title);
-      setdeadline(props.assignment.deadline);
-    }
-  }, [props]);
+  }, [props.assignment, props.selectedAssignment]);
 
   return (
     <div
@@ -32,35 +41,44 @@ const Header = (props) => {
           style={{ margin: "auto 30px", fontSize: "30px", color: "#FFFFFF" }}
         />
       </div>
-      <div className="headerCenter" style={{ width: "480px", display: "flex" }}>
-        <div
-          className="subject"
-          style={{
-            width: "230px",
-            height: "20px",
-            margin: "auto 5px",
-            backgroundColor: "#FFFFFF",
-            borderRadius: "3px",
-            fontSize: "14px",
-            textAlign: "center",
-          }}
-        >
-          {lectureTitle}
-        </div>
-        <div
-          className="week"
-          style={{
-            width: "230px",
-            height: "20px",
-            margin: "auto 5px",
-            backgroundColor: "#FFFFFF",
-            borderRadius: "3px",
-            fontSize: "14px",
-            textAlign: "center",
-          }}
-        >
-          {assignmentTitle}
-        </div>
+      <div
+        className="headerCenter"
+        style={{ width: "480px", display: "flex", alignItems: "center" }}
+      >
+        <FormControl sx={{ m: 1, width: "50%" }} size="small">
+          <InputLabel id="demo-select-small" style={{ color: "#000000" }}>
+            강의 선택
+          </InputLabel>
+          <Select
+            labelId="demo-select-small"
+            id="demo-select-small"
+            value={props.selectedLecture}
+            label="Age"
+            style={{ backgroundColor: "#FFFFFF" }}
+            onChange={handleChangeLecture}
+          >
+            {props.lecture.map((lecture, index) => {
+              return <MenuItem value={index}>{lecture.title}</MenuItem>;
+            })}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ m: 1, width: "50%" }} size="small">
+          <InputLabel id="demo-select-small" style={{ color: "#000000" }}>
+            과제 선택
+          </InputLabel>
+          <Select
+            labelId="demo-select-small"
+            id="demo-select-small"
+            value={props.selectedAssignment}
+            label="Age"
+            style={{ backgroundColor: "#FFFFFF" }}
+            onChange={handleChangeAssignment}
+          >
+            {props.assignment.map((assignment, index) => {
+              return <MenuItem value={index}>{assignment.title}</MenuItem>;
+            })}
+          </Select>
+        </FormControl>
       </div>
       <div
         className="headerRight"
@@ -78,7 +96,8 @@ const Header = (props) => {
             textAlign: "center",
           }}
         >
-          제출마감일:&nbsp;{deadline}
+          제출마감일:&nbsp;
+          {dayjs(new Date(deadline)).format("YYYY-MM-DD HH:mm")}
         </div>
         <SettingsIcon
           style={{

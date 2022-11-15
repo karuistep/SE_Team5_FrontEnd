@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 // 부트스트랩 스타일 파일 추가
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.esm.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

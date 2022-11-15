@@ -11,18 +11,24 @@ import {
   getProblem,
   getProblemDetail,
   saveCodeInDB,
-  saveCodeInPC,
 } from "./api/api";
 
 function App() {
   const [lecture, setLecture] = useState([]);
+  const [selectedLecture, setSelectedLecture] = useState(0);
   const [assignment, setAssignment] = useState([]);
+  const [selectedAssignment, setSelectedAssignment] = useState(0);
   const [problem, setProblem] = useState([]);
+  const [selectedProblem, setSelectedProblem] = useState(0);
+  const [testcase, setTestcase] = useState([]);
+  const [code, setCode] = useState("user code");
+  const [selectedCode, setSelectedCode] = useState(0);
+  const [rightSection, setRightSection] = useState(1);
 
   useEffect(() => {
     getLecture()
       .then((res) => {
-        setLecture(res.data[0]);
+        setLecture(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -30,32 +36,55 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (lecture !== undefined) {
-      getAssignment(lecture.lecture_id)
+    if (lecture !== undefined && lecture[selectedLecture] !== undefined) {
+      getAssignment(lecture[selectedLecture].lecture_id)
         .then((res) => {
-          setAssignment(res.data[0]);
+          setAssignment(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }, [lecture]);
+  }, [lecture, selectedLecture]);
 
   useEffect(() => {
-    if (assignment !== undefined) {
-      getProblems(lecture.lecture_id, assignment.assignment_id)
+    if (
+      assignment !== undefined &&
+      assignment[selectedAssignment] !== undefined
+    ) {
+      getProblems(
+        lecture[selectedLecture].lecture_id,
+        assignment[selectedAssignment].assignment_id
+      )
         .then((res) => {
-          setProblem(res.data[0]);
+          setProblem(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }, [assignment]);
+  }, [assignment, selectedAssignment]);
+
+  useEffect(() => {
+    getProblemDetail(0, selectedProblem)
+      .then((res) => {
+        setTestcase(res.data[1]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [problem, selectedProblem]);
 
   return (
     <div className="inner" style={{ width: "1440px", margin: "auto" }}>
-      <Header lecture={lecture} assignment={assignment} />
+      <Header
+        lecture={lecture}
+        assignment={assignment}
+        selectedLecture={selectedLecture}
+        selectedAssignment={selectedAssignment}
+        setSelectedLecture={setSelectedLecture}
+        setSelectedAssignment={setSelectedAssignment}
+      />
       <div
         className="main"
         style={{
@@ -66,9 +95,18 @@ function App() {
           display: "flex",
         }}
       >
-        <Left problem={problem} />
-        <Center />
-        <Right />
+        <Left
+          problem={problem}
+          selectedProblem={selectedProblem}
+          setSelectedProblem={setSelectedProblem}
+          testcase={testcase}
+        />
+        <Center
+          code={code}
+          setCode={setCode}
+          setRightSection={setRightSection}
+        />
+        <Right rightSection={rightSection} />
       </div>
     </div>
   );

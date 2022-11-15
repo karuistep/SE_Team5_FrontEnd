@@ -1,17 +1,41 @@
 import { useState, useEffect } from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const Left = (props) => {
-  const [problemTitle, setProblemTitle] = useState("문제제목");
-  const [problemContent, setProblemContent] = useState("문제내용");
-  const [problemConstraint, setProblemConstraint] = useState("문제제약사항");
+  const [problemTitle, setProblemTitle] = useState("");
+  const [problemContent, setProblemContent] = useState("");
+  const [problemConstraint, setProblemConstraint] = useState("");
+  const [showedTestcase1Input, setShowedTestcase1Input] = useState("");
+  const [showedTestcase1Output, setShowedTestcase1Output] = useState("");
+  const [showedTestcase2Input, setShowedTestcase2Input] = useState("");
+  const [showedTestcase2Output, setShowedTestcase2Output] = useState("");
+
+  const handleChangeProblem = (event) => {
+    props.setSelectedProblem(event.target.value);
+  };
 
   useEffect(() => {
-    if (props.problem != undefined) {
-      setProblemTitle(props.problem.title);
-      setProblemContent(props.problem.description);
-      setProblemConstraint(props.problem.restriction);
+    if (
+      props.problem !== undefined &&
+      props.problem[props.selectedProblem] !== undefined
+    ) {
+      setProblemTitle(props.problem[props.selectedProblem].title);
+      setProblemContent(props.problem[props.selectedProblem].description);
+      setProblemConstraint(props.problem[props.selectedProblem].restriction);
     }
-  }, [props]);
+  }, [props.problem, props.selectedProblem]);
+
+  useEffect(() => {
+    if (props.testcase !== undefined && props.testcase.length >= 1) {
+      setShowedTestcase1Input(props.testcase[0].input);
+      setShowedTestcase1Output(props.testcase[0].output);
+      setShowedTestcase2Input(props.testcase[1].input);
+      setShowedTestcase2Output(props.testcase[1].output);
+    }
+  }, [props.testcase]);
 
   return (
     <div
@@ -35,7 +59,23 @@ const Left = (props) => {
             alignItems: "center",
           }}
         >
-          문제 & 참조/제약사항
+          <FormControl sx={{ m: 1, width: "50%" }} size="small">
+            <InputLabel id="demo-select-small" style={{ color: "#000000" }}>
+              문제 선택
+            </InputLabel>
+            <Select
+              labelId="demo-select-small"
+              id="demo-select-small"
+              value={props.selectedProblem}
+              label="Age"
+              style={{ backgroundColor: "#FFFFFF" }}
+              onChange={handleChangeProblem}
+            >
+              {props.problem.map((problem, index) => {
+                return <MenuItem value={index}>{problem.title}</MenuItem>;
+              })}
+            </Select>
+          </FormControl>
         </div>
         <div className="problemContent" style={{ height: "210px" }}>
           <div
@@ -143,7 +183,16 @@ const Left = (props) => {
               backgroundColor: "#FFFFFF",
             }}
           >
-            테스트케이스 1이 들어갑니다.
+            <div style={{ display: "flex" }}>
+              <div style={{ width: "45%" }}>Input:</div>
+              <div>Output:</div>
+            </div>
+            <div style={{ display: "flex" }}>
+              <div style={{ width: "45%", color: "#6187FF" }}>
+                {showedTestcase1Input}
+              </div>
+              <div style={{ color: "#FF5A5A" }}>{showedTestcase1Output}</div>
+            </div>
           </div>
         </div>
         <div className="testcase2" style={{ height: "100px" }}>
@@ -177,7 +226,16 @@ const Left = (props) => {
               backgroundColor: "#FFFFFF",
             }}
           >
-            테스트케이스 2가 들어갑니다.
+            <div style={{ display: "flex" }}>
+              <div style={{ width: "45%" }}>Input:</div>
+              <div>Output:</div>
+            </div>
+            <div style={{ display: "flex" }}>
+              <div style={{ width: "45%", color: "#6187FF" }}>
+                {showedTestcase2Input}
+              </div>
+              <div style={{ color: "#FF5A5A" }}>{showedTestcase2Output}</div>
+            </div>
           </div>
         </div>
       </div>
