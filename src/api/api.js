@@ -32,7 +32,7 @@ const getProblem = async (lecture_id, assignment_id, problem_id) => {
 };
 
 const getProblemDetail = async (user_id, problem_id) => {
-  return await instance.get(`/study/${user_id}/${problem_id}`);
+  return await instance.get(`/study/${user_id}/${problem_id}/`);
 };
 
 const getRecentProblem = async () => {
@@ -40,7 +40,7 @@ const getRecentProblem = async () => {
 };
 
 const saveCodeInDB = async (problem, user, user_code) => {
-  return await instance.post("/study/save/", {
+  return await instance.post(`/study/save/`, {
     problem,
     user,
     user_code,
@@ -48,7 +48,7 @@ const saveCodeInDB = async (problem, user, user_code) => {
 };
 
 const executeCode = async (user_code) => {
-  return await instance.post(`/study/run`, {
+  return await instance.post(`/stud y/run/`, {
     user_code,
   });
 };

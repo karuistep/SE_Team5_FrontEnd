@@ -6,6 +6,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import dayjs from "dayjs";
+import "./Header.scss";
+import { Javascript } from "@mui/icons-material";
 
 const Header = (props) => {
   const [deadline, setDeadline] = useState("");
@@ -18,6 +20,10 @@ const Header = (props) => {
     props.setSelectedAssignment(event.target.value);
   };
 
+  const handleChangeTheme = (event) => {
+    console.log("테마변경");
+  };
+
   useEffect(() => {
     if (
       props.assignment !== undefined &&
@@ -28,26 +34,22 @@ const Header = (props) => {
   }, [props.assignment, props.selectedAssignment]);
 
   return (
-    <div
-      className="header"
-      style={{
-        height: "50px",
-        backgroundColor: "#414E5A",
-        display: "flex",
-      }}
-    >
-      <div className="headerLeft" style={{ width: "480px", display: "flex" }}>
-        <HomeIcon
-          style={{ margin: "auto 30px", fontSize: "30px", color: "#FFFFFF" }}
+    <div className="header">
+      <div className="headerLeft">
+        <img
+          className="skkuLogo"
+          src="https://upload.wikimedia.org/wikipedia/en/thumb/4/40/Sungkyunkwan_University_seal.svg/1200px-Sungkyunkwan_University_seal.svg.png"
+          alt="성균관대학교 로고"
         />
+        <div className="title">Welcome to SKKU Coding Web</div>
+        {/* <HomeIcon
+          style={{ margin: "auto 30px", fontSize: "30px", color: "#FFFFFF" }}
+        /> */}
       </div>
-      <div
-        className="headerCenter"
-        style={{ width: "480px", display: "flex", alignItems: "center" }}
-      >
+      <div className="headerCenter">
         <FormControl sx={{ m: 1, width: "50%" }} size="small">
           <InputLabel id="demo-select-small" style={{ color: "#000000" }}>
-            강의 선택
+            Select Lecture
           </InputLabel>
           <Select
             labelId="demo-select-small"
@@ -64,7 +66,7 @@ const Header = (props) => {
         </FormControl>
         <FormControl sx={{ m: 1, width: "50%" }} size="small">
           <InputLabel id="demo-select-small" style={{ color: "#000000" }}>
-            과제 선택
+            Select Assignment
           </InputLabel>
           <Select
             labelId="demo-select-small"
@@ -80,29 +82,16 @@ const Header = (props) => {
           </Select>
         </FormControl>
       </div>
-      <div
-        className="headerRight"
-        style={{ width: "480px", display: "flex", justifyContent: "flex-end" }}
-      >
-        <div
-          className="week"
-          style={{
-            width: "230px",
-            height: "20px",
-            margin: "auto 5px",
-            backgroundColor: "#FFFFFF",
-            borderRadius: "3px",
-            fontSize: "12px",
-            textAlign: "center",
-          }}
-        >
-          제출마감일:&nbsp;
+      <div className="headerRight">
+        <div className="week">
+          Due:&nbsp;
           {dayjs(new Date(deadline)).format("YYYY-MM-DD HH:mm")}
         </div>
         <SettingsIcon
+          onClick={handleChangeTheme}
           style={{
             float: "right",
-            margin: "auto 30px",
+            margin: "auto 10px",
             fontSize: "30px",
             color: "#FFFFFF",
           }}

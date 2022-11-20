@@ -20,6 +20,7 @@ const CodeEditor = (props) => {
 
   return (
     <Editor
+      theme="vs-dark"
       height="100%"
       defaultLanguage="python"
       defaultValue={props.code}

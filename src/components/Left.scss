@@ -1,0 +1,97 @@
+.left {
+  width: 30%;
+  margin-right: 5%;
+
+  .problem {
+    height: calc(50% - 25px);
+    margin-bottom: 50px;
+    background-color: #34465a;
+
+    .problemHeader {
+      height: 50px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      color: #ffffff;
+      font-weight: 500;
+    }
+
+    .problemContent {
+      height: calc(50% - 30px);
+
+      .problemContentHeader {
+        margin-bottom: 10px;
+        padding-left: 10px;
+        color: #ffffff;
+        font-weight: 500;
+      }
+
+      .problemContentText {
+        padding-left: 10px;
+        color: #ffffff;
+        font-weight: 500;
+      }
+    }
+
+    .problemConstraint {
+      height: calc(50% - 30px);
+
+      .problemConstraintHeader {
+        margin-bottom: 10px;
+        padding-left: 10px;
+        color: #ffffff;
+        font-weight: 500;
+      }
+
+      .problemConstraintText {
+        padding-left: 10px;
+        color: #ffffff;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .testcase {
+    height: calc(50% - 25px);
+    background-color: #34465a;
+
+    .testcaseHeader {
+      margin-bottom: 10px;
+      padding: 10px 0 0 10px;
+      color: #ffffff;
+      font-weight: 500;
+    }
+
+    .testcase1 {
+      height: calc(50% - 22px);
+      color: #ffffff;
+
+      .testcase1Header {
+        height: 25px;
+        margin-bottom: 10px;
+        padding-left: 10px;
+        font-weight: 700;
+      }
+
+      .testcase1Content {
+        padding-left: 10px;
+      }
+    }
+
+    .testcase2 {
+      height: calc(50% - 22px);
+      color: #ffffff;
+
+      .testcase2Header {
+        height: 25px;
+        margin-bottom: 10px;
+        padding-left: 10px;
+        font-weight: 700;
+      }
+
+      .testcase2Content {
+        padding-left: 10px;
+      }
+    }
+  }
+}

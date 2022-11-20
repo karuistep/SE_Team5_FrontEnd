@@ -1,0 +1,37 @@
+.center {
+  width: 30%;
+  margin-right: 5%;
+}
+.center .centerHeader {
+  height: 75px;
+  margin-bottom: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  background-color: #34465a;
+  font-weight: 700;
+}
+.center .centerHeader .centerSavedBox1 {
+  margin-right: 15px;
+}
+.center .centerHeader .centerSavedBox1 .centerSavedBox1Title {
+  display: flex;
+  justify-content: center;
+}
+.center .centerHeader .centerSavedBox2 .centerSavedBox2Title {
+  display: flex;
+  justify-content: center;
+}
+.center .centerContent {
+  height: calc(100% - 250px);
+  margin-bottom: 50px;
+  background-color: #34465a;
+}
+.center .centerFooter {
+  height: 75px;
+  background-color: #34465a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,4 +1,3 @@
-import "./App.css";
 import Header from "./components/Header";
 import Left from "./components/Left";
 import Center from "./components/Center";
@@ -12,6 +11,7 @@ import {
   getProblemDetail,
   saveCodeInDB,
 } from "./api/api";
+import "./App.scss";
 
 function App() {
   const [lecture, setLecture] = useState([]);
@@ -24,6 +24,7 @@ function App() {
   const [code, setCode] = useState("user code");
   const [selectedCode, setSelectedCode] = useState(0);
   const [rightSection, setRightSection] = useState(1);
+  const [excuteResult, setExecuteResult] = useState("");
 
   useEffect(() => {
     getLecture()
@@ -68,6 +69,7 @@ function App() {
   useEffect(() => {
     getProblemDetail(0, selectedProblem)
       .then((res) => {
+        console.log(res.data);
         setTestcase(res.data[1]);
       })
       .catch((err) => {
@@ -76,37 +78,31 @@ function App() {
   }, [problem, selectedProblem]);
 
   return (
-    <div className="inner" style={{ width: "1440px", margin: "auto" }}>
-      <Header
-        lecture={lecture}
-        assignment={assignment}
-        selectedLecture={selectedLecture}
-        selectedAssignment={selectedAssignment}
-        setSelectedLecture={setSelectedLecture}
-        setSelectedAssignment={setSelectedAssignment}
-      />
-      <div
-        className="main"
-        style={{
-          height: "650px",
-          border: "1px solid #000000",
-          boxSizing: "border-box",
-          backgroundColor: "green",
-          display: "flex",
-        }}
-      >
-        <Left
-          problem={problem}
-          selectedProblem={selectedProblem}
-          setSelectedProblem={setSelectedProblem}
-          testcase={testcase}
+    <div className="root">
+      <div className="inner">
+        <Header
+          lecture={lecture}
+          assignment={assignment}
+          selectedLecture={selectedLecture}
+          selectedAssignment={selectedAssignment}
+          setSelectedLecture={setSelectedLecture}
+          setSelectedAssignment={setSelectedAssignment}
         />
-        <Center
-          code={code}
-          setCode={setCode}
-          setRightSection={setRightSection}
-        />
-        <Right rightSection={rightSection} />
+        <div className="main">
+          <Left
+            problem={problem}
+            selectedProblem={selectedProblem}
+            setSelectedProblem={setSelectedProblem}
+            testcase={testcase}
+          />
+          <Center
+            code={code}
+            setCode={setCode}
+            setRightSection={setRightSection}
+            setExecuteResult={setExecuteResult}
+          />
+          <Right rightSection={rightSection} excuteResult={excuteResult} />
+        </div>
       </div>
     </div>
   );

@@ -5,10 +5,20 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import SimCardDownloadIcon from "@mui/icons-material/SimCardDownload";
 import Button from "react-bootstrap/Button";
+import { executeCode } from "../api/api";
+import "./Center.scss";
 
 const Center = (props) => {
   const handleExecuteCode = () => {
     props.setRightSection(1);
+    console.log(props.code);
+    executeCode(props.code)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleGradeCode = () => {
@@ -20,135 +30,101 @@ const Center = (props) => {
   };
 
   return (
-    <div
-      className="center"
-      style={{
-        width: "479px",
-        borderRight: "1px solid #000000",
-        boxSizing: "border-box",
-        backgroundColor: "blue",
-      }}
-    >
-      <div
-        className="centerHeader"
-        style={{
-          height: "50px",
-          paddingLeft: "30px",
-          paddingRight: "15px",
-          backgroundColor: "#FFFFFF",
-          color: "#000000",
-          fontWeight: "700",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        코드 입력
-        <SaveIcon style={{ marginLeft: "auto", color: "#414E5A" }} />
-        <div
-          style={{
-            width: "40px",
-            height: "40px",
-            marginLeft: "10px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#414E5A",
-            color: "#FFFFFF",
-          }}
-        >
-          1
+    <div className="center">
+      <div className="centerHeader">
+        Code Editor
+        <SaveIcon style={{ margin: "auto 15px", color: "#FFFFFF" }} />
+        <div className="centerSavedBox1">
+          <div className="centerSavedBox1Title">code slot</div>
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="Basic radio toggle button group"
+          >
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio1"
+              autocomplete="off"
+              checked
+            />
+            <label class="btn btn-outline-secondary" for="btnradio1">
+              1
+            </label>
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio2"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-secondary" for="btnradio2">
+              2
+            </label>
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio3"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-secondary" for="btnradio3">
+              3
+            </label>
+          </div>
         </div>
-        <div
-          style={{
-            width: "40px",
-            height: "40px",
-            marginLeft: "5px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#414E5A",
-            color: "#FFFFFF",
-          }}
-        >
-          2
-        </div>
-        <div
-          style={{
-            width: "40px",
-            height: "40px",
-            marginLeft: "5px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#414E5A",
-            color: "#FFFFFF",
-          }}
-        >
-          3
+        <div className="centerSavedBox2">
+          <div className="centerSavedBox2Title">submit code</div>
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="Basic outlined example"
+          >
+            <button type="button" class="btn btn-outline-secondary">
+              1
+            </button>
+            <button type="button" class="btn btn-outline-secondary">
+              2
+            </button>
+            <button type="button" class="btn btn-outline-secondary">
+              3
+            </button>
+          </div>
         </div>
       </div>
-      <div
-        className="centerContent"
-        style={{
-          height: "548px",
-          borderBottom: "1px solid #000000",
-          paddingTop: "10px",
-          paddingLeft: "30px",
-          boxSizing: "border-box",
-          backgroundColor: "#FFFFFF",
-        }}
-      >
+      <div className="centerContent">
         <CodeEditor code={props.code} setCode={props.setCode} />
       </div>
-      <div
-        className="centerFooter"
-        style={{
-          height: "50px",
-          paddingLeft: "20px",
-          paddingRight: "20px",
-          backgroundColor: "#FFFFFF",
-          color: "#000000",
-          fontWeight: "700",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <FolderIcon style={{ marginRight: "15px", color: "#414E5A" }} />
-        <RefreshIcon style={{ marginRight: "15px", color: "#414E5A" }} />
-        <FileCopyIcon style={{ marginRight: "15px", color: "#414E5A" }} />
-        <SimCardDownloadIcon style={{ color: "#414E5A" }} />
+      <div className="centerFooter">
+        <FolderIcon style={{ marginRight: "10px", color: "#FFFFFF" }} />
+        <RefreshIcon style={{ marginRight: "10px", color: "#FFFFFF" }} />
+        <FileCopyIcon style={{ marginRight: "10px", color: "#FFFFFF" }} />
+        <SimCardDownloadIcon
+          style={{ marginRight: "10px", color: "#FFFFFF" }}
+        />
         <Button
           variant="secondary"
           style={{
-            marginLeft: "auto",
-            paddingLeft: "15px",
-            paddingRight: "15px",
+            marginRight: "10px",
           }}
           onClick={handleExecuteCode}
         >
-          실행
+          Execute
         </Button>
         <Button
           variant="secondary"
           style={{
-            marginLeft: "5px",
-            paddingLeft: "15px",
-            paddingRight: "15px",
+            marginRight: "10px",
           }}
           onClick={handleGradeCode}
         >
-          채점
+          Score
         </Button>
-        <Button
-          variant="primary"
-          style={{
-            marginLeft: "15px",
-            paddingLeft: "15px",
-            paddingRight: "15px",
-          }}
-          onClick={handleSubmitCode}
-        >
-          제출
+        <Button variant="secondary" onClick={handleSubmitCode}>
+          Submit
         </Button>
       </div>
     </div>
