@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { runTestcase } from "../api/api";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -11,38 +12,67 @@ const Left = (props) => {
   const [problemConstraint, setProblemConstraint] = useState("");
   const [showedTestcase1Input, setShowedTestcase1Input] = useState("");
   const [showedTestcase1Output, setShowedTestcase1Output] = useState("");
+  const [showedTestcase1Result, setShowedTestcase1Result] = useState("");
   const [showedTestcase2Input, setShowedTestcase2Input] = useState("");
   const [showedTestcase2Output, setShowedTestcase2Output] = useState("");
+  const [showedTestcase2Result, setShowedTestcase2Result] = useState("");
 
   const handleChangeProblem = (event) => {
-    props.setSelectedProblem(event.target.value);
+    props.setSelectedProblemIndex(event.target.value);
+    props.setSelectedProblemID(props.problem[event.target.value].problem_id);
   };
 
   const handleVerifyTestcase1 = (event) => {
-    console.log("테스트케이스1 검증");
+    runTestcase(props.code, showedTestcase1Input, showedTestcase1Output)
+      .then((res) => {
+        if (res.data.result == "P") {
+          setShowedTestcase1Result("PASS");
+        } else {
+          setShowedTestcase1Result("FAIL");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleVerifyTestcase2 = (event) => {
-    console.log("테스트케이스2 검증");
+    runTestcase(props.code, showedTestcase2Input, showedTestcase2Output)
+      .then((res) => {
+        if (res.data.result == "P") {
+          setShowedTestcase2Result("PASS");
+        } else {
+          setShowedTestcase2Result("FAIL");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
+  // 문제배열과 선택 문제 인덱스가 바뀔 때마다 문제 목록과 선택된 문제 인덱스를 받아와서 제목, 내용, 제약조건 설정
   useEffect(() => {
     if (
       props.problem !== undefined &&
-      props.problem[props.selectedProblem] !== undefined
+      props.problem[props.selectedProblemIndex] !== undefined
     ) {
-      setProblemTitle(props.problem[props.selectedProblem].title);
-      setProblemContent(props.problem[props.selectedProblem].description);
-      setProblemConstraint(props.problem[props.selectedProblem].restriction);
+      setProblemTitle(props.problem[props.selectedProblemIndex].title);
+      setProblemContent(props.problem[props.selectedProblemIndex].description);
+      setProblemConstraint(
+        props.problem[props.selectedProblemIndex].restriction
+      );
     }
-  }, [props.problem, props.selectedProblem]);
+  }, [props.problem, props.selectedProblemIndex]);
 
+  // 테스트케이스배열이 바뀔 때마다 테스트케이스 0번, 1번 인덱스의 입출력 추출 및 검증결과 초기화
   useEffect(() => {
     if (props.testcase !== undefined && props.testcase.length >= 1) {
       setShowedTestcase1Input(props.testcase[0].input);
       setShowedTestcase1Output(props.testcase[0].output);
       setShowedTestcase2Input(props.testcase[1].input);
       setShowedTestcase2Output(props.testcase[1].output);
+      setShowedTestcase1Result("");
+      setShowedTestcase2Result("");
     }
   }, [props.testcase]);
 
@@ -57,7 +87,7 @@ const Left = (props) => {
             <Select
               labelId="demo-select-small"
               id="demo-select-small"
-              value={props.selectedProblem}
+              value={props.selectedProblemIndex}
               label="Age"
               style={{ backgroundColor: "#FFFFFF" }}
               onChange={handleChangeProblem}
@@ -102,8 +132,12 @@ const Left = (props) => {
               <div style={{ width: "45%", color: "#6187FF" }}>
                 {showedTestcase1Input}
               </div>
-              <div style={{ color: "#FF5A5A" }}>{showedTestcase1Output}</div>
+              <div style={{ width: "40%", color: "#FF5A5A" }}>
+                {showedTestcase1Output}
+              </div>
+              {showedTestcase1Result}
             </div>
+            테스트케이스 검증 오류 해결요망
           </div>
         </div>
         <div className="testcase2">
@@ -127,7 +161,10 @@ const Left = (props) => {
               <div style={{ width: "45%", color: "#6187FF" }}>
                 {showedTestcase2Input}
               </div>
-              <div style={{ color: "#FF5A5A" }}>{showedTestcase2Output}</div>
+              <div style={{ width: "40%", color: "#FF5A5A" }}>
+                {showedTestcase2Output}
+              </div>
+              {showedTestcase2Result}
             </div>
           </div>
         </div>

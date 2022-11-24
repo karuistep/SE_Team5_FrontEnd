@@ -1,4 +1,3 @@
-import HomeIcon from "@mui/icons-material/Home";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useState, useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
@@ -7,7 +6,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import dayjs from "dayjs";
 import "./Header.scss";
-import { Javascript } from "@mui/icons-material";
 
 const Header = (props) => {
   const [deadline, setDeadline] = useState("");
@@ -17,21 +15,22 @@ const Header = (props) => {
   };
 
   const handleChangeAssignment = (event) => {
-    props.setSelectedAssignment(event.target.value);
+    props.setSelectedAssignmentIndex(event.target.value);
   };
 
   const handleChangeTheme = (event) => {
     console.log("테마변경");
   };
 
+  // 처음에 과제 목록과 선택된 과제 인덱스를 받아와서 데드라인 설정
   useEffect(() => {
     if (
       props.assignment !== undefined &&
-      props.assignment[props.selectedAssignment] !== undefined
+      props.assignment[props.selectedAssignmentIndex] !== undefined
     ) {
-      setDeadline(props.assignment[props.selectedAssignment].deadline);
+      setDeadline(props.assignment[props.selectedAssignmentIndex].deadline);
     }
-  }, [props.assignment, props.selectedAssignment]);
+  }, [props.assignment, props.selectedAssignmentIndex]);
 
   return (
     <div className="header">
@@ -71,7 +70,7 @@ const Header = (props) => {
           <Select
             labelId="demo-select-small"
             id="demo-select-small"
-            value={props.selectedAssignment}
+            value={props.selectedAssignmentIndex}
             label="Age"
             style={{ backgroundColor: "#FFFFFF" }}
             onChange={handleChangeAssignment}

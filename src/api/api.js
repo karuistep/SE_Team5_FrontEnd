@@ -39,17 +39,33 @@ const getRecentProblem = async () => {
   return await instance.get(`/study/recent`);
 };
 
-const saveCodeInDB = async (problem, user, user_code) => {
+const saveCodeInDB = async (problem, user, user_code, code_idx) => {
   return await instance.post(`/study/save/`, {
     problem,
     user,
     user_code,
+    code_idx,
   });
 };
 
 const executeCode = async (user_code) => {
-  return await instance.post(`/stud y/run/`, {
+  return await instance.post(`/study/run/`, {
     user_code,
+  });
+};
+
+const gradeCode = async (user_code, problem_id) => {
+  return await instance.post(`/study/grade/`, {
+    user_code,
+    problem_id,
+  });
+};
+
+const runTestcase = async (user_code, input, output) => {
+  return await instance.post(`/study/testcase/`, {
+    user_code,
+    input,
+    output,
   });
 };
 
@@ -62,4 +78,6 @@ export {
   getRecentProblem,
   saveCodeInDB,
   executeCode,
+  gradeCode,
+  runTestcase,
 };

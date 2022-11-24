@@ -10,9 +10,9 @@ const CodeEditor = (props) => {
     }
   }, [editorRef.current]);
 
-  function handleEditorDidMount(editor, monaco) {
+  const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
-  }
+  };
 
   const handleEditorChange = (editor) => {
     props.setCode(editorRef.current.getValue());
@@ -23,7 +23,7 @@ const CodeEditor = (props) => {
       theme="vs-dark"
       height="100%"
       defaultLanguage="python"
-      defaultValue={props.code}
+      value={props.code}
       onMount={handleEditorDidMount}
       onChange={handleEditorChange}
     />

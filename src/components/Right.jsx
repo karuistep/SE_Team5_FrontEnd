@@ -5,7 +5,7 @@ const Right = (props) => {
     return (
       <div className="right1">
         <div className="right1Header">Execution Result</div>
-        <div className="right1Content">실행결과가 들어갑니다.</div>
+        <div className="right1Content">{props.excuteMessage}</div>
       </div>
     );
   } else if (props.rightSection == 2) {
