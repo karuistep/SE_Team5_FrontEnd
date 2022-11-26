@@ -24,10 +24,15 @@ function App() {
   const [code, setCode] = useState("default_code");
   const [userCode, setUserCode] = useState([]); // 사용자의 코드 슬롯 1,2,3을 저장하는 배열
   const [selectedCode, setSelectedCode] = useState(0); // 사용자가 몇 번째(0,1,2) 코드 슬롯을 사용중인지 저장하는 변수
+  const [isSubmitted1, setIsSubmitted1] = useState(false); // 사용자의 제출코드 존재여부(1, 2, 3번째 제출)를 판별하는 변수들
+  const [isSubmitted2, setIsSubmitted2] = useState(false);
+  const [isSubmitted3, setIsSubmitted3] = useState(false);
+  const [codeIsSaved, setCodeIsSaved] = useState(0); // 코드 저장 여부를 저장하는 변수
   const [rightSection, setRightSection] = useState(1);
   const [excuteResult, setExecuteResult] = useState(true);
   const [excuteMessage, setExecuteMessage] = useState("");
   const [excuteErrorLine, setExecuteErrorLine] = useState(1);
+  const [gradeResult, setGradeResult] = useState({});
 
   // 처음 로드할 때 한 번만 강의 목록을 가져온다
   useEffect(() => {
@@ -80,13 +85,13 @@ function App() {
     }
   }, [assignment, selectedAssignmentIndex]);
 
-  // 선택된 문제 인덱스나, 선택된 코드 번호가 변경되었을 때 선택된 문제 ID를 업데이트하고 테스트케이스, 사용자 입력 코드를 업데이트한다.
+  // 문제가 변경되었을 때 선택된 문제 ID를 업데이트하고 테스트케이스, 사용자 입력 코드를 업데이트한다.
   useEffect(() => {
     if (problem !== undefined && problem[selectedProblemIndex] !== undefined) {
       setSelectedProblemID(problem[selectedProblemIndex].problem_id);
+      setSelectedCode(0);
       getProblemDetail(0, selectedProblemID)
         .then((res) => {
-          console.log(res.data);
           setTestcase(res.data[1]);
           setUserCode(res.data[2]);
         })
@@ -94,14 +99,33 @@ function App() {
           console.log(err);
         });
     }
-  }, [problem, selectedProblemIndex, selectedCode]);
+  }, [problem, selectedProblemIndex]);
 
-  // 사용자 저장 코드배열이나 현재 선택된 코드슬롯 번호가 변경되면 현재 출력코드를 사용자 저장 코드로 업데이트한다.
+  // 선택 코드슬롯이 변경되었을 때 현재 코드 변경 및 제출코드 블락 설정
   useEffect(() => {
-    if (userCode != undefined && userCode[selectedCode] != undefined) {
-      setCode(userCode[selectedCode]);
+    let flag = 0;
+    userCode.map((code, index) => {
+      if (code.code_idx === selectedCode + 1) {
+        flag = 1;
+        setCode(code.user_code);
+        return;
+      }
+    });
+    if (flag == 0) {
+      setCode("");
     }
-  }, [userCode, selectedCode]);
+    userCode.map((code, index) => {
+      if (code.code_idx === 4) {
+        setIsSubmitted1(true);
+      }
+      if (code.code_idx === 5) {
+        setIsSubmitted2(true);
+      }
+      if (code.code_idx === 6) {
+        setIsSubmitted3(true);
+      }
+    });
+  }, [selectedCode, userCode]);
 
   return (
     <div className="root">
@@ -119,6 +143,7 @@ function App() {
             code={code}
             problem={problem}
             testcase={testcase}
+            selectedCode={selectedCode}
             selectedProblemIndex={selectedProblemIndex}
             setSelectedProblemIndex={setSelectedProblemIndex}
             setSelectedProblemID={setSelectedProblemID}
@@ -128,17 +153,26 @@ function App() {
             code={code}
             userCode={userCode}
             selectedCode={selectedCode}
+            isSubmitted1={isSubmitted1}
+            isSubmitted2={isSubmitted2}
+            isSubmitted3={isSubmitted3}
             excuteResult={excuteResult}
             excuteErrorLine={excuteErrorLine}
             setCode={setCode}
             setUserCode={setUserCode}
             setSelectedCode={setSelectedCode}
+            setCodeIsSaved={setCodeIsSaved}
             setRightSection={setRightSection}
             setExecuteResult={setExecuteResult}
             setExecuteMessage={setExecuteMessage}
             setExecuteErrorLine={setExecuteErrorLine}
+            setGradeResult={setGradeResult}
           />
-          <Right rightSection={rightSection} excuteMessage={excuteMessage} />
+          <Right
+            rightSection={rightSection}
+            excuteMessage={excuteMessage}
+            gradeResult={gradeResult}
+          />
         </div>
       </div>
     </div>

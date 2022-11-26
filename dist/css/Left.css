@@ -25,7 +25,7 @@
   font-weight: 500;
 }
 .left .problem .problemContent .problemContentText {
-  padding-left: 10px;
+  padding: 0 10px;
   color: #ffffff;
   font-weight: 500;
 }
@@ -39,7 +39,7 @@
   font-weight: 500;
 }
 .left .problem .problemConstraint .problemConstraintText {
-  padding-left: 10px;
+  padding: 0 10px;
   color: #ffffff;
   font-weight: 500;
 }

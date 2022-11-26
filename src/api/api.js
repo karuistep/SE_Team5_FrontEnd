@@ -61,6 +61,15 @@ const gradeCode = async (user_code, problem_id) => {
   });
 };
 
+const submitCode = async (problem_id, user_id, user_code, code_idx) => {
+  return await instance.post(`/study/submit/`, {
+    problem_id,
+    user_id,
+    user_code,
+    code_idx,
+  });
+};
+
 const runTestcase = async (user_code, input, output) => {
   return await instance.post(`/study/testcase/`, {
     user_code,
@@ -79,5 +88,6 @@ export {
   saveCodeInDB,
   executeCode,
   gradeCode,
+  submitCode,
   runTestcase,
 };

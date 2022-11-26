@@ -13,9 +13,13 @@ const Left = (props) => {
   const [showedTestcase1Input, setShowedTestcase1Input] = useState("");
   const [showedTestcase1Output, setShowedTestcase1Output] = useState("");
   const [showedTestcase1Result, setShowedTestcase1Result] = useState("");
+  const [showedTestcase1YourOutput, setShowedTestcase1YourOutput] =
+    useState("");
   const [showedTestcase2Input, setShowedTestcase2Input] = useState("");
   const [showedTestcase2Output, setShowedTestcase2Output] = useState("");
   const [showedTestcase2Result, setShowedTestcase2Result] = useState("");
+  const [showedTestcase2YourOutput, setShowedTestcase2YourOutput] =
+    useState("");
 
   const handleChangeProblem = (event) => {
     props.setSelectedProblemIndex(event.target.value);
@@ -29,6 +33,7 @@ const Left = (props) => {
           setShowedTestcase1Result("PASS");
         } else {
           setShowedTestcase1Result("FAIL");
+          setShowedTestcase1YourOutput(res.data.output);
         }
       })
       .catch((err) => {
@@ -43,6 +48,7 @@ const Left = (props) => {
           setShowedTestcase2Result("PASS");
         } else {
           setShowedTestcase2Result("FAIL");
+          setShowedTestcase2YourOutput(res.data.output);
         }
       })
       .catch((err) => {
@@ -64,7 +70,7 @@ const Left = (props) => {
     }
   }, [props.problem, props.selectedProblemIndex]);
 
-  // 테스트케이스배열이 바뀔 때마다 테스트케이스 0번, 1번 인덱스의 입출력 추출 및 검증결과 초기화
+  // 테스트케이스배열이 바뀔 때마다 테스트케이스 0번, 1번 인덱스의 입출력 추출 및 검증결과, 사용자 출력 초기화
   useEffect(() => {
     if (props.testcase !== undefined && props.testcase.length >= 1) {
       setShowedTestcase1Input(props.testcase[0].input);
@@ -73,8 +79,10 @@ const Left = (props) => {
       setShowedTestcase2Output(props.testcase[1].output);
       setShowedTestcase1Result("");
       setShowedTestcase2Result("");
+      setShowedTestcase1YourOutput("");
+      setShowedTestcase2YourOutput("");
     }
-  }, [props.testcase]);
+  }, [props.testcase, props.selectedCode]);
 
   return (
     <div className="left">
@@ -125,8 +133,8 @@ const Left = (props) => {
           </div>
           <div className="testcase1Content">
             <div style={{ display: "flex" }}>
-              <div style={{ width: "45%" }}>Input:</div>
-              <div>Output:</div>
+              <div style={{ width: "45%" }}>Input :</div>
+              <div>Output :</div>
             </div>
             <div style={{ display: "flex" }}>
               <div style={{ width: "45%", color: "#6187FF" }}>
@@ -135,9 +143,16 @@ const Left = (props) => {
               <div style={{ width: "40%", color: "#FF5A5A" }}>
                 {showedTestcase1Output}
               </div>
-              {showedTestcase1Result}
             </div>
-            테스트케이스 검증 오류 해결요망
+            <br />
+            <div style={{ display: "flex" }}>
+              <div style={{ width: "45%" }}>PASS/FAIL :</div>
+              <div>Your Output :</div>
+            </div>
+            <div style={{ display: "flex" }}>
+              <div style={{ width: "45%" }}>{showedTestcase1Result}</div>
+              <div>{showedTestcase1YourOutput}</div>
+            </div>
           </div>
         </div>
         <div className="testcase2">
@@ -154,8 +169,8 @@ const Left = (props) => {
           </div>
           <div className="testcase2Content">
             <div style={{ display: "flex" }}>
-              <div style={{ width: "45%" }}>Input:</div>
-              <div>Output:</div>
+              <div style={{ width: "45%" }}>Input :</div>
+              <div>Output :</div>
             </div>
             <div style={{ display: "flex" }}>
               <div style={{ width: "45%", color: "#6187FF" }}>
@@ -164,7 +179,15 @@ const Left = (props) => {
               <div style={{ width: "40%", color: "#FF5A5A" }}>
                 {showedTestcase2Output}
               </div>
-              {showedTestcase2Result}
+            </div>
+            <br />
+            <div style={{ display: "flex" }}>
+              <div style={{ width: "45%" }}>PASS/FAIL :</div>
+              <div>Your Output :</div>
+            </div>
+            <div style={{ display: "flex" }}>
+              <div style={{ width: "45%" }}>{showedTestcase2Result}</div>
+              <div>{showedTestcase2YourOutput}</div>
             </div>
           </div>
         </div>

@@ -5,19 +5,35 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import SimCardDownloadIcon from "@mui/icons-material/SimCardDownload";
 import Button from "react-bootstrap/Button";
-import { saveCodeInDB, executeCode, gradeCode } from "../api/api";
+import {
+  getProblemDetail,
+  saveCodeInDB,
+  executeCode,
+  gradeCode,
+  submitCode,
+} from "../api/api";
 import "./Center.scss";
 
 const Center = (props) => {
   const handleSaveCode = () => {
-    // 코드를 슬롯에 저장하는 API요청
+    // 코드를 슬롯에 저장하는 API요청. 저장 후 getProblemDetail을 실행
     saveCodeInDB(
       props.selectedProblemID,
       0,
       props.code,
       Number(props.selectedCode) + 1
     )
-      .then((res) => {})
+      .then((res) => {
+        getProblemDetail(0, props.selectedProblemID)
+          .then((res) => {
+            console.log("set usercode: ", res.data[2]);
+            props.setUserCode(res.data[2]);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        alert("Code Saved Successfully");
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -25,25 +41,33 @@ const Center = (props) => {
 
   // 코드슬롯을 변경하였을 경우 현재 선택된 코드슬롯 번호를 바꾸고 코드내용을 불러온다.
   const handleChangeCodeSlot = (event) => {
-    props.setSelectedCode(event.target.value);
-    let temp = "";
+    props.setSelectedCode(Number(event.target.value));
+    let flag = 0;
     props.userCode.map((code, index) => {
       if (code.code_idx === Number(event.target.value) + 1) {
-        temp = code.user_code;
+        flag = 1;
+        props.setCode(code.user_code);
+        return;
       }
     });
-    props.setCode(temp);
+    if (flag == 0) {
+      props.setCode("");
+    }
   };
 
   // 제출코드를 눌렀을 경우 현재 출력 코드를 제출된 코드내용으로 변경시킨다.
   const handleLoadSubmitCode = (event) => {
-    let temp = "";
+    let flag = 0;
     props.userCode.map((code, index) => {
       if (code.code_idx === Number(event.target.value) + 4) {
-        temp = code.user_code;
+        flag = 1;
+        props.setCode(code.user_code);
+        return;
       }
     });
-    props.setCode(temp);
+    if (flag == 0) {
+      alert("No Submission Code Exist In This Slot");
+    }
   };
 
   // 로컬에서 불러온 파일에서 텍스트를 읽는 함수
@@ -95,6 +119,7 @@ const Center = (props) => {
     element.click();
   };
 
+  // 코드 실행
   const handleExecuteCode = () => {
     props.setRightSection(1);
     executeCode(props.code)
@@ -110,11 +135,12 @@ const Center = (props) => {
       });
   };
 
+  // 코드 채점
   const handleGradeCode = () => {
     props.setRightSection(2);
     gradeCode(props.code, props.selectedProblemID)
       .then((res) => {
-        console.log(res.data);
+        props.setGradeResult(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -123,6 +149,29 @@ const Center = (props) => {
 
   const handleSubmitCode = () => {
     props.setRightSection(3);
+    console.log(
+      "문제번호 : ",
+      props.selectedProblemID,
+      "사용자 번호 : ",
+      0,
+      "사용자 입력 코드 : ",
+      props.code,
+      "코드 인덱스 : ",
+      Number(props.selectedCode) + 1,
+      "으로 제출을 시도합니다"
+    );
+    submitCode(
+      props.selectedProblemID,
+      0,
+      props.code,
+      Number(props.selectedCode) + 1
+    )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -148,7 +197,7 @@ const Center = (props) => {
               id="btnradio1"
               autocomplete="off"
               value={0}
-              defaultChecked={true}
+              checked={props.selectedCode == 0}
               onClick={handleChangeCodeSlot}
             />
             <label class="btn btn-outline-secondary" for="btnradio1">
@@ -162,6 +211,7 @@ const Center = (props) => {
               id="btnradio2"
               autocomplete="off"
               value={1}
+              checked={props.selectedCode == 1}
               onClick={handleChangeCodeSlot}
             />
             <label class="btn btn-outline-secondary" for="btnradio2">
@@ -175,6 +225,7 @@ const Center = (props) => {
               id="btnradio3"
               autocomplete="off"
               value={2}
+              checked={props.selectedCode == 2}
               onClick={handleChangeCodeSlot}
             />
             <label class="btn btn-outline-secondary" for="btnradio3">
@@ -183,7 +234,7 @@ const Center = (props) => {
           </div>
         </div>
         <div className="centerSavedBox2">
-          <div className="centerSavedBox2Title">submit code</div>
+          <div className="centerSavedBox2Title">submitted</div>
           <div
             class="btn-group"
             role="group"
@@ -193,6 +244,7 @@ const Center = (props) => {
               type="button"
               class="btn btn-outline-secondary"
               value={0}
+              disabled={!props.isSubmitted1}
               onClick={handleLoadSubmitCode}
             >
               1
@@ -201,6 +253,7 @@ const Center = (props) => {
               type="button"
               class="btn btn-outline-secondary"
               value={1}
+              disabled={!props.isSubmitted2}
               onClick={handleLoadSubmitCode}
             >
               2
@@ -209,6 +262,7 @@ const Center = (props) => {
               type="button"
               class="btn btn-outline-secondary"
               value={2}
+              disabled={!props.isSubmitted3}
               onClick={handleLoadSubmitCode}
             >
               3
