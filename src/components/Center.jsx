@@ -26,7 +26,6 @@ const Center = (props) => {
       .then((res) => {
         getProblemDetail(0, props.selectedProblemID)
           .then((res) => {
-            console.log("set usercode: ", res.data[2]);
             props.setUserCode(res.data[2]);
           })
           .catch((err) => {
@@ -147,19 +146,9 @@ const Center = (props) => {
       });
   };
 
+  // 코드 제출
   const handleSubmitCode = () => {
     props.setRightSection(3);
-    console.log(
-      "문제번호 : ",
-      props.selectedProblemID,
-      "사용자 번호 : ",
-      0,
-      "사용자 입력 코드 : ",
-      props.code,
-      "코드 인덱스 : ",
-      Number(props.selectedCode) + 1,
-      "으로 제출을 시도합니다"
-    );
     submitCode(
       props.selectedProblemID,
       0,
@@ -167,7 +156,12 @@ const Center = (props) => {
       Number(props.selectedCode) + 1
     )
       .then((res) => {
-        console.log(res.data);
+        if (res.data.result.msg == "fail") {
+          alert("You have already submitted it 3 times. Cannot submit more.");
+        } else {
+          props.setRightSection(3);
+          props.setSubmitResult(res.data);
+        }
       })
       .catch((err) => {
         console.log(err);

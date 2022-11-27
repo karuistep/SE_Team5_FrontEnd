@@ -59,7 +59,24 @@
   .right3Content {
     height: calc(100% - 100px);
     padding: 10px;
-    background-color: #1e1e1e;
+    background-color: #34465a;
     color: #ffffff;
+
+    .submitResult1 {
+      .submitResult1Header {
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #34465a;
+        color: #ffffff;
+        font-weight: 700;
+      }
+
+      .submitResult1Tap {
+        display: flex;
+        justify-content: center;
+      }
+    }
   }
 }

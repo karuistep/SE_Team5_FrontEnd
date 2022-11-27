@@ -33,6 +33,7 @@ function App() {
   const [excuteMessage, setExecuteMessage] = useState("");
   const [excuteErrorLine, setExecuteErrorLine] = useState(1);
   const [gradeResult, setGradeResult] = useState({});
+  const [submitResult, setSubmitResult] = useState({});
 
   // 처음 로드할 때 한 번만 강의 목록을 가져온다
   useEffect(() => {
@@ -167,6 +168,7 @@ function App() {
             setExecuteMessage={setExecuteMessage}
             setExecuteErrorLine={setExecuteErrorLine}
             setGradeResult={setGradeResult}
+            setSubmitResult={setSubmitResult}
           />
           <Right
             rightSection={rightSection}

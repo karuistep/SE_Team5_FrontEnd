@@ -1,4 +1,3 @@
-import SettingsIcon from "@mui/icons-material/Settings";
 import { useState, useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -41,9 +40,6 @@ const Header = (props) => {
           alt="성균관대학교 로고"
         />
         <div className="title">Welcome to SKKU Coding Web</div>
-        {/* <HomeIcon
-          style={{ margin: "auto 30px", fontSize: "30px", color: "#FFFFFF" }}
-        /> */}
       </div>
       <div className="headerCenter">
         <FormControl sx={{ m: 1, width: "50%" }} size="small">
@@ -86,15 +82,6 @@ const Header = (props) => {
           Due:&nbsp;
           {dayjs(new Date(deadline)).format("YYYY-MM-DD HH:mm")}
         </div>
-        <SettingsIcon
-          onClick={handleChangeTheme}
-          style={{
-            float: "right",
-            margin: "auto 10px",
-            fontSize: "30px",
-            color: "#FFFFFF",
-          }}
-        />
       </div>
     </div>
   );
