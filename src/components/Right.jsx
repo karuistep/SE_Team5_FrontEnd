@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import {
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  Bar,
+} from "recharts";
 import "./Right.scss";
 
 const Right = (props) => {
@@ -18,6 +27,9 @@ const Right = (props) => {
   const [testcase5Result, setTestcase5Result] = useState("");
 
   // 제출 결과를 저장하는 변수들
+  const [submitData, setSubmitData] = useState([
+    { name: "criterion", score: 100 },
+  ]);
   const [submitResultCodex, setSubmitResultCodex] = useState("");
 
   const [submitResultMultimetricOutput1, setSubmitResultMultimetricOutput1] =
@@ -82,7 +94,7 @@ const Right = (props) => {
   const [submitResultPage, setSubmitResultPage] = useState(0);
   const [submitResultPage1Content, setSubmitResultPage1Content] = useState(0);
 
-  // 첫번째 테스트 케이스의 조건부 렌더링 함수
+  // 채점 시 첫번째 테스트 케이스의 조건부 렌더링 함수
   const gradeResult1 = () => {
     if (testcase1Result == "실패") {
       return (
@@ -95,7 +107,7 @@ const Right = (props) => {
     }
   };
 
-  // 두번째 테스트 케이스의 조건부 렌더링 함수
+  // 채점 시 두번째 테스트 케이스의 조건부 렌더링 함수
   const gradeResult2 = () => {
     if (testcase2Result == "실패") {
       return (
@@ -108,64 +120,197 @@ const Right = (props) => {
     }
   };
 
-  // 제출결과를 렌더링하는 함수
-  const handleSubmitResult = () => {
-    if (submitResultPage === 0) {
+  // 제출 시 첫번째 테스트 케이스의 조건부 렌더링 함수
+  const submitGradeResult1 = () => {
+    if (submitResultTestcase1Result == "실패") {
       return (
-        <div className="submitResult1">
-          <div className="submitResult1Header">
-            제출 결과
-            <PublishedWithChangesIcon
-              type="button"
-              style={{ position: "absolute", right: "-370px" }}
-              onClick={handleChangeResultMode}
-            />
-          </div>
-          <div className="submitResult1Graph"></div>
-          <div className="submitResult1Tap">
-            <div class="btn-group" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-secondary">
-                기능점수확인
-              </button>
-              <button type="button" class="btn btn-secondary">
-                효율점수확인
-              </button>
-              <button type="button" class="btn btn-secondary">
-                가독성점수확인
-              </button>
-            </div>
-          </div>
-          <div className="submitResult1Content"></div>
-        </div>
-      );
-    } else {
-      return (
-        <div className="submitResult1">
-          <div className="submitResult1Header">
-            코드 설명 & 관련 자료
-            <PublishedWithChangesIcon
-              type="button"
-              style={{ position: "absolute", right: "-370px" }}
-              onClick={handleChangeResultMode}
-            />
-          </div>
-          <div className="submitResult1Graph"></div>
-          <div className="submitResult1Tap">
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-          <div className="submitResult1Content"></div>
+        <div>
+          Output : {submitResultTestcase1Output}
+          <br />
+          Your Output : {submitResultTestcase1UserOutput}
         </div>
       );
     }
   };
 
+  // 제출 시 두번째 테스트 케이스의 조건부 렌더링 함수
+  const submitGradeResult2 = () => {
+    if (submitResultTestcase2Result == "실패") {
+      return (
+        <div>
+          Output : {submitResultTestcase2Output}
+          <br />
+          Your Output : {submitResultTestcase2UserOutput}
+        </div>
+      );
+    }
+  };
+
+  // 제출결과를 렌더링하는 함수
+  const handleSubmitResult = () => {
+    if (submitResultPage === 0) {
+      return (
+        <div className="submitResult1">
+          <PublishedWithChangesIcon
+            type="button"
+            style={{ position: "absolute", top: "10px", right: "0" }}
+            onClick={handleChangeResultMode}
+          />
+          <div className="submitResult1Header">제출 결과</div>
+          <div className="submitResult1Graph">
+            <BarChart
+              width={388}
+              height={250}
+              data={submitData}
+              style={{ backgroundColor: "#E2E2E2" }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="score (average)" fill="#8884d8" />
+            </BarChart>
+          </div>
+          <div className="submitResult1Tap">
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                value={0}
+                onClick={handleSubmitContentChange}
+              >
+                기능점수확인
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                value={1}
+                onClick={handleSubmitContentChange}
+              >
+                효율점수확인
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                value={2}
+                onClick={handleSubmitContentChange}
+              >
+                가독성점수확인
+              </button>
+            </div>
+          </div>
+          <div className="submitResult1Content">{handleSubmitContent()}</div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="submitResult2">
+          <div className="submitResult2Header">
+            코드 설명 & 관련 자료
+            <PublishedWithChangesIcon
+              type="button"
+              style={{ position: "absolute", top: "10px", right: "0" }}
+              onClick={handleChangeResultMode}
+            />
+          </div>
+          <div className="submitResult2Content">
+            code explanation: <br />
+            {submitResultCodex}
+            <br />
+            <br />
+            useful materials:
+            <br />
+            {submitResultReference.map((reference) => {
+              return (
+                <>
+                  <a href={reference.url} target="blank">
+                    {reference.title}
+                  </a>
+                  <br />
+                </>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+  };
+
+  // 채점결과 페이지(제출결과, 코드설명/관련자료) 바꾸는 함수
   const handleChangeResultMode = () => {
     if (submitResultPage === 0) {
       setSubmitResultPage(1);
     } else {
       setSubmitResultPage(0);
+    }
+  };
+
+  // 채점결과 중 제출결과 표시내용(기능점수, 효율점수, 가독성점수) 바꾸는 함수
+  const handleSubmitContentChange = (event) => {
+    setSubmitResultPage1Content(event.target.value);
+  };
+
+  // 채점결과 중 기능점수, 효율점수, 가독성점수를 렌더링하는 함수
+  const handleSubmitContent = () => {
+    if (submitResultPage1Content == 0) {
+      return (
+        <div className="submitContent1">
+          총점&nbsp;{submitResultGradeScore}점<br />
+          <br />
+          테스트케이스-1: {submitResultTestcase1Result}
+          {submitGradeResult1()}
+          <br />
+          <br />
+          테스트케이스-2: {submitResultTestcase2Result}
+          {submitGradeResult2()}
+          <br />
+          <br />
+          히든 테스트케이스-3: {submitResultTestcase3Result}
+          <br />
+          <br />
+          히든 테스트케이스-4: {submitResultTestcase4Result}
+          <br />
+          <br />
+          히든 테스트케이스-5: {submitResultTestcase5Result}
+        </div>
+      );
+    } else if (submitResultPage1Content == 1) {
+      return (
+        <div className="submitContent2">
+          <div>control complexity score: {submitResultMultimetricOutput1}</div>
+          <br />
+          <div>data complexity score: {submitResultMultimetricOutput2}</div>
+          <br /> <div>halstead score: {submitResultMultimetricOutput3}</div>
+          <br /> <div>loc score: {submitResultMultimetricOutput4}</div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="submitContent3">
+          <div>eradicate score: {submitResultPylama1Score}</div>
+          {submitResultPylama1Message.map((message) => {
+            return <div>{message}</div>;
+          })}
+          <br />
+          <div>mypy score: {submitResultPylama2Score}</div>
+          {submitResultPylama2Message.map((message) => {
+            return <div>{message}</div>;
+          })}
+          <br /> <div>pycodestyle score: {submitResultPylama3Score}</div>
+          {submitResultPylama3Message.map((message) => {
+            return <div>{message}</div>;
+          })}
+          <br /> <div>pylint score: {submitResultPylama4Score}</div>
+          {submitResultPylama4Message.map((message) => {
+            return <div>{message}</div>;
+          })}
+          <br /> <div>radon score: {submitResultPylama5Score}</div>
+          {submitResultPylama5Message.map((message) => {
+            return <div>{message}</div>;
+          })}
+        </div>
+      );
     }
   };
 
@@ -198,7 +343,12 @@ const Right = (props) => {
 
   // 제출결과가 변경될 때마다 제출 관련 변수들을 변경
   useEffect(() => {
-    if (props.submitResult !== undefined && props.submitResult !== {}) {
+    console.log(props.submitResult);
+    if (
+      props.submitResult !== undefined &&
+      props.submitResult !== {} &&
+      props.submitResult.codex_output !== undefined
+    ) {
       setSubmitResultCodex(props.submitResult.codex_output);
 
       setSubmitResultMultimetricOutput1(
@@ -276,8 +426,31 @@ const Right = (props) => {
 
       setSubmitResultPage(0);
       setSubmitResultPage1Content(0);
+
+      setSubmitData([
+        { name: "function", score: submitResultGradeScore },
+        {
+          name: "efficiency",
+          score:
+            (submitResultMultimetricOutput1 +
+              submitResultMultimetricOutput2 +
+              submitResultMultimetricOutput3 +
+              submitResultMultimetricOutput4) /
+            4,
+        },
+        {
+          name: "readability",
+          score:
+            (submitResultPylama1Score + submitResultPylama2Score,
+            +submitResultPylama3Score +
+              submitResultPylama4Score +
+              submitResultPylama5Score) / 5,
+        },
+      ]);
     }
   }, [props.submitResult]);
+
+  console.log(submitData);
 
   // 사용자가 실행버튼을 누르면 실행화면을 보여준다
   if (props.rightSection == 1) {

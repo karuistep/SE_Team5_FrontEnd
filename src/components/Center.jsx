@@ -148,7 +148,6 @@ const Center = (props) => {
 
   // 코드 제출
   const handleSubmitCode = () => {
-    props.setRightSection(3);
     submitCode(
       props.selectedProblemID,
       0,
@@ -156,7 +155,8 @@ const Center = (props) => {
       Number(props.selectedCode) + 1
     )
       .then((res) => {
-        if (res.data.result.msg == "fail") {
+        console.log(res.data);
+        if (res.data.result.msg === "fail") {
           alert("You have already submitted it 3 times. Cannot submit more.");
         } else {
           props.setRightSection(3);

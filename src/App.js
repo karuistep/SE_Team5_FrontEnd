@@ -174,6 +174,7 @@ function App() {
             rightSection={rightSection}
             excuteMessage={excuteMessage}
             gradeResult={gradeResult}
+            submitResult={submitResult}
           />
         </div>
       </div>
