@@ -31,6 +31,7 @@ const Left = (props) => {
       .then((res) => {
         if (res.data.result == "P") {
           setShowedTestcase1Result("PASS");
+          setShowedTestcase1YourOutput("");
         } else {
           setShowedTestcase1Result("FAIL");
           setShowedTestcase1YourOutput(res.data.output);
@@ -46,6 +47,7 @@ const Left = (props) => {
       .then((res) => {
         if (res.data.result == "P") {
           setShowedTestcase2Result("PASS");
+          setShowedTestcase2YourOutput("");
         } else {
           setShowedTestcase2Result("FAIL");
           setShowedTestcase2YourOutput(res.data.output);
@@ -89,9 +91,10 @@ const Left = (props) => {
       <div className="problem">
         <div className="problemHeader">
           <FormControl sx={{ m: 1, width: "100%" }} size="small">
-            <InputLabel id="demo-select-small" style={{ color: "#000000" }}>
-              Select Problem
-            </InputLabel>
+            <InputLabel
+              id="demo-select-small"
+              style={{ color: "#000000" }}
+            ></InputLabel>
             <Select
               labelId="demo-select-small"
               id="demo-select-small"

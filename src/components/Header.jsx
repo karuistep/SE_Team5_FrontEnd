@@ -43,9 +43,10 @@ const Header = (props) => {
       </div>
       <div className="headerCenter">
         <FormControl sx={{ m: 1, width: "50%" }} size="small">
-          <InputLabel id="demo-select-small" style={{ color: "#000000" }}>
-            Select Lecture
-          </InputLabel>
+          <InputLabel
+            id="demo-select-small"
+            style={{ color: "#000000" }}
+          ></InputLabel>
           <Select
             labelId="demo-select-small"
             id="demo-select-small"
@@ -61,9 +62,10 @@ const Header = (props) => {
           </Select>
         </FormControl>
         <FormControl sx={{ m: 1, width: "50%" }} size="small">
-          <InputLabel id="demo-select-small" style={{ color: "#000000" }}>
-            Select Assignment
-          </InputLabel>
+          <InputLabel
+            id="demo-select-small"
+            style={{ color: "#000000" }}
+          ></InputLabel>
           <Select
             labelId="demo-select-small"
             id="demo-select-small"
