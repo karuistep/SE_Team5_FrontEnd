@@ -148,6 +148,7 @@ const Center = (props) => {
 
   // 코드 제출
   const handleSubmitCode = () => {
+    props.setSubmittedWait(1);
     submitCode(
       props.selectedProblemID,
       0,
@@ -155,16 +156,18 @@ const Center = (props) => {
       Number(props.selectedCode) + 1
     )
       .then((res) => {
-        console.log(res.data);
+        console.log("제출로 받은 데이터: ", res.data);
         if (res.data.result.msg === "fail") {
           alert("You have already submitted it 3 times. Cannot submit more.");
         } else {
           props.setRightSection(3);
           props.setSubmitResult(res.data);
         }
+        props.setSubmittedWait(0);
       })
       .catch((err) => {
         console.log(err);
+        props.setSubmittedWait(0);
       });
   };
 
@@ -176,6 +179,7 @@ const Center = (props) => {
           type="button"
           style={{ margin: "auto 15px", color: "#FFFFFF" }}
           onClick={handleSaveCode}
+          disabled={props.submittedWait}
         />
         <div className="centerSavedBox1">
           <div className="centerSavedBox1Title">code slot</div>
@@ -193,6 +197,7 @@ const Center = (props) => {
               value={0}
               checked={props.selectedCode == 0}
               onClick={handleChangeCodeSlot}
+              disabled={props.submittedWait}
             />
             <label class="btn btn-outline-secondary" for="btnradio1">
               1
@@ -207,6 +212,7 @@ const Center = (props) => {
               value={1}
               checked={props.selectedCode == 1}
               onClick={handleChangeCodeSlot}
+              disabled={props.submittedWait}
             />
             <label class="btn btn-outline-secondary" for="btnradio2">
               2
@@ -221,6 +227,7 @@ const Center = (props) => {
               value={2}
               checked={props.selectedCode == 2}
               onClick={handleChangeCodeSlot}
+              disabled={props.submittedWait}
             />
             <label class="btn btn-outline-secondary" for="btnradio3">
               3
@@ -238,7 +245,7 @@ const Center = (props) => {
               type="button"
               class="btn btn-outline-secondary"
               value={0}
-              disabled={!props.isSubmitted1}
+              disabled={!props.isSubmitted1 || props.submittedWait}
               onClick={handleLoadSubmitCode}
             >
               1
@@ -247,7 +254,7 @@ const Center = (props) => {
               type="button"
               class="btn btn-outline-secondary"
               value={1}
-              disabled={!props.isSubmitted2}
+              disabled={!props.isSubmitted2 || props.submittedWait}
               onClick={handleLoadSubmitCode}
             >
               2
@@ -256,7 +263,7 @@ const Center = (props) => {
               type="button"
               class="btn btn-outline-secondary"
               value={2}
-              disabled={!props.isSubmitted3}
+              disabled={!props.isSubmitted3 || props.submittedWait}
               onClick={handleLoadSubmitCode}
             >
               3
@@ -272,21 +279,25 @@ const Center = (props) => {
           type="button"
           style={{ marginRight: "10px", color: "#FFFFFF" }}
           onClick={handleLoadCode}
+          disabled={props.submittedWait}
         />
         <RefreshIcon
           type="button"
           style={{ marginRight: "10px", color: "#FFFFFF" }}
           onClick={handleRefreshCode}
+          disabled={props.submittedWait}
         />
         <FileCopyIcon
           type="button"
           style={{ marginRight: "10px", color: "#FFFFFF" }}
           onClick={handleCopyCode}
+          disabled={props.submittedWait}
         />
         <SimCardDownloadIcon
           type="button"
           style={{ marginRight: "10px", color: "#FFFFFF" }}
           onClick={handleDownloadCode}
+          disabled={props.submittedWait}
         />
         <Button
           variant="secondary"
@@ -294,6 +305,7 @@ const Center = (props) => {
             marginRight: "10px",
           }}
           onClick={handleExecuteCode}
+          disabled={props.submittedWait}
         >
           Execute
         </Button>
@@ -303,10 +315,15 @@ const Center = (props) => {
             marginRight: "10px",
           }}
           onClick={handleGradeCode}
+          disabled={props.submittedWait}
         >
           Score
         </Button>
-        <Button variant="secondary" onClick={handleSubmitCode}>
+        <Button
+          variant="secondary"
+          onClick={handleSubmitCode}
+          disabled={props.submittedWait}
+        >
           Submit
         </Button>
       </div>

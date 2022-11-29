@@ -155,6 +155,7 @@ const Right = (props) => {
             type="button"
             style={{ position: "absolute", top: "10px", right: "0" }}
             onClick={handleChangeResultMode}
+            disabled={props.submittedWait}
           />
           <div className="submitResult1Header">제출 결과</div>
           <div className="submitResult1Graph">
@@ -179,6 +180,7 @@ const Right = (props) => {
                 class="btn btn-secondary"
                 value={0}
                 onClick={handleSubmitContentChange}
+                disabled={props.submittedWait}
               >
                 기능점수확인
               </button>
@@ -187,6 +189,7 @@ const Right = (props) => {
                 class="btn btn-secondary"
                 value={1}
                 onClick={handleSubmitContentChange}
+                disabled={props.submittedWait}
               >
                 효율점수확인
               </button>
@@ -195,6 +198,7 @@ const Right = (props) => {
                 class="btn btn-secondary"
                 value={2}
                 onClick={handleSubmitContentChange}
+                disabled={props.submittedWait}
               >
                 가독성점수확인
               </button>

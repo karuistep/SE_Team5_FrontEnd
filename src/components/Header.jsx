@@ -53,6 +53,7 @@ const Header = (props) => {
             label="Age"
             style={{ backgroundColor: "#FFFFFF" }}
             onChange={handleChangeLecture}
+            disabled={props.submittedWait}
           >
             {props.lecture.map((lecture, index) => {
               return <MenuItem value={index}>{lecture.title}</MenuItem>;
@@ -70,6 +71,7 @@ const Header = (props) => {
             label="Age"
             style={{ backgroundColor: "#FFFFFF" }}
             onChange={handleChangeAssignment}
+            disabled={props.submittedWait}
           >
             {props.assignment.map((assignment, index) => {
               return <MenuItem value={index}>{assignment.title}</MenuItem>;

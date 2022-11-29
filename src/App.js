@@ -34,6 +34,8 @@ function App() {
   const [excuteErrorLine, setExecuteErrorLine] = useState(1);
   const [gradeResult, setGradeResult] = useState({});
   const [submitResult, setSubmitResult] = useState({});
+  const [codeDiff, setCodeDiff] = useState(0);
+  const [submittedWait, setSubmittedWait] = useState(0);
 
   // 처음 로드할 때 한 번만 강의 목록을 가져온다
   useEffect(() => {
@@ -136,6 +138,7 @@ function App() {
           assignment={assignment}
           selectedLecture={selectedLecture}
           selectedAssignmentIndex={selectedAssignmentIndex}
+          submittedWait={submittedWait}
           setSelectedLecture={setSelectedLecture}
           setSelectedAssignmentIndex={setSelectedAssignmentIndex}
         />
@@ -146,6 +149,7 @@ function App() {
             testcase={testcase}
             selectedCode={selectedCode}
             selectedProblemIndex={selectedProblemIndex}
+            submittedWait={submittedWait}
             setSelectedProblemIndex={setSelectedProblemIndex}
             setSelectedProblemID={setSelectedProblemID}
           />
@@ -159,6 +163,7 @@ function App() {
             isSubmitted3={isSubmitted3}
             excuteResult={excuteResult}
             excuteErrorLine={excuteErrorLine}
+            submittedWait={submittedWait}
             setCode={setCode}
             setUserCode={setUserCode}
             setSelectedCode={setSelectedCode}
@@ -169,12 +174,14 @@ function App() {
             setExecuteErrorLine={setExecuteErrorLine}
             setGradeResult={setGradeResult}
             setSubmitResult={setSubmitResult}
+            setSubmittedWait={setSubmittedWait}
           />
           <Right
             rightSection={rightSection}
             excuteMessage={excuteMessage}
             gradeResult={gradeResult}
             submitResult={submitResult}
+            submittedWait={submittedWait}
           />
         </div>
       </div>

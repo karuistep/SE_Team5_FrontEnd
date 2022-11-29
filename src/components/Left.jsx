@@ -99,6 +99,7 @@ const Left = (props) => {
               label="Age"
               style={{ backgroundColor: "#FFFFFF" }}
               onChange={handleChangeProblem}
+              disabled={props.submittedWait}
             >
               {props.problem.map((problem, index) => {
                 return <MenuItem value={index}>{problem.title}</MenuItem>;
@@ -127,6 +128,7 @@ const Left = (props) => {
               class="btn btn-secondary btn-sm"
               style={{ float: "right", marginRight: "10px" }}
               onClick={handleVerifyTestcase1}
+              disabled={props.submittedWait}
             >
               Verify
             </button>
@@ -163,6 +165,7 @@ const Left = (props) => {
               class="btn btn-secondary btn-sm"
               style={{ float: "right", marginRight: "10px" }}
               onClick={handleVerifyTestcase2}
+              disabled={props.submittedWait}
             >
               Verify
             </button>
