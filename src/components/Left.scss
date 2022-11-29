@@ -9,6 +9,7 @@
 
     .problemHeader {
       height: 50px;
+      padding: 0 15px;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
@@ -27,9 +28,10 @@
       }
 
       .problemContentText {
-        padding: 0 10px;
+        padding: 0 15px;
         color: #ffffff;
         font-weight: 500;
+        line-height: 40px;
       }
     }
 
@@ -47,6 +49,7 @@
         padding: 0 10px;
         color: #ffffff;
         font-weight: 500;
+        line-height: 40px;
       }
     }
   }

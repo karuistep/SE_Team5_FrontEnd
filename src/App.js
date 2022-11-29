@@ -28,14 +28,15 @@ function App() {
   const [isSubmitted2, setIsSubmitted2] = useState(false);
   const [isSubmitted3, setIsSubmitted3] = useState(false);
   const [codeIsSaved, setCodeIsSaved] = useState(0); // 코드 저장 여부를 저장하는 변수
+  const [centerSection, setCenterSection] = useState(1);
   const [rightSection, setRightSection] = useState(1);
   const [excuteResult, setExecuteResult] = useState(true);
   const [excuteMessage, setExecuteMessage] = useState("");
   const [excuteErrorLine, setExecuteErrorLine] = useState(1);
   const [gradeResult, setGradeResult] = useState({});
   const [submitResult, setSubmitResult] = useState({});
-  const [codeDiff, setCodeDiff] = useState(0);
-  const [submittedWait, setSubmittedWait] = useState(0);
+  const [submittedWait, setSubmittedWait] = useState(0); // 제출이 진행되고 있는 지를 저장하는 변수
+  const [codeEditorIsExpand, setCodeEditorIsExpand] = useState(0); // 코드에디터의 확장여부를 저장하는 변수
 
   // 처음 로드할 때 한 번만 강의 목록을 가져온다
   useEffect(() => {
@@ -52,6 +53,8 @@ function App() {
   // 선택된 강의 ID가 변경되었을 때 해당 강의 아래에 있는 과제 목록을 가져온다
   useEffect(() => {
     if (lecture !== undefined && lecture[selectedLecture] !== undefined) {
+      setCenterSection(1);
+      setRightSection(1);
       getAssignment(lecture[selectedLecture].lecture_id)
         .then((res) => {
           setAssignment(res.data);
@@ -61,6 +64,7 @@ function App() {
         .catch((err) => {
           console.log(err);
         });
+      setCodeEditorIsExpand(0);
     }
   }, [lecture, selectedLecture]);
 
@@ -70,6 +74,8 @@ function App() {
       assignment !== undefined &&
       assignment[selectedAssignmentIndex] !== undefined
     ) {
+      setCenterSection(1);
+      setRightSection(1);
       setSelectedAssignmentID(
         assignment[selectedAssignmentIndex].assignment_id
       );
@@ -85,12 +91,15 @@ function App() {
         .catch((err) => {
           console.log(err);
         });
+      setCodeEditorIsExpand(0);
     }
   }, [assignment, selectedAssignmentIndex]);
 
   // 문제가 변경되었을 때 선택된 문제 ID를 업데이트하고 테스트케이스, 사용자 입력 코드를 업데이트한다.
   useEffect(() => {
     if (problem !== undefined && problem[selectedProblemIndex] !== undefined) {
+      setCenterSection(1);
+      setRightSection(1);
       setSelectedProblemID(problem[selectedProblemIndex].problem_id);
       setSelectedCode(0);
       getProblemDetail(0, selectedProblemID)
@@ -101,6 +110,7 @@ function App() {
         .catch((err) => {
           console.log(err);
         });
+      setCodeEditorIsExpand(0);
     }
   }, [problem, selectedProblemIndex]);
 
@@ -154,6 +164,7 @@ function App() {
             setSelectedProblemID={setSelectedProblemID}
           />
           <Center
+            centerSection={centerSection}
             selectedProblemID={selectedProblemID}
             code={code}
             userCode={userCode}
@@ -164,6 +175,8 @@ function App() {
             excuteResult={excuteResult}
             excuteErrorLine={excuteErrorLine}
             submittedWait={submittedWait}
+            codeEditorIsExpand={codeEditorIsExpand}
+            setCenterSection={setCenterSection}
             setCode={setCode}
             setUserCode={setUserCode}
             setSelectedCode={setSelectedCode}
@@ -175,6 +188,7 @@ function App() {
             setGradeResult={setGradeResult}
             setSubmitResult={setSubmitResult}
             setSubmittedWait={setSubmittedWait}
+            setCodeEditorIsExpand={setCodeEditorIsExpand}
           />
           <Right
             rightSection={rightSection}

@@ -9,6 +9,7 @@ import {
   Legend,
   Bar,
 } from "recharts";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import "./Right.scss";
 
 const Right = (props) => {
@@ -124,7 +125,7 @@ const Right = (props) => {
   const submitGradeResult1 = () => {
     if (submitResultTestcase1Result == "실패") {
       return (
-        <div>
+        <div style={{ paddingLeft: "30px" }}>
           Output : {submitResultTestcase1Output}
           <br />
           Your Output : {submitResultTestcase1UserOutput}
@@ -137,7 +138,7 @@ const Right = (props) => {
   const submitGradeResult2 = () => {
     if (submitResultTestcase2Result == "실패") {
       return (
-        <div>
+        <div style={{ paddingLeft: "30px" }}>
           Output : {submitResultTestcase2Output}
           <br />
           Your Output : {submitResultTestcase2UserOutput}
@@ -260,58 +261,96 @@ const Right = (props) => {
     if (submitResultPage1Content == 0) {
       return (
         <div className="submitContent1">
-          총점&nbsp;{submitResultGradeScore}점<br />
+          <AssignmentIcon />
+          &nbsp;총점 {submitResultGradeScore}점<br />
           <br />
-          테스트케이스-1: {submitResultTestcase1Result}
+          <AssignmentIcon />
+          &nbsp;테스트케이스-1: {submitResultTestcase1Result}
           {submitGradeResult1()}
           <br />
           <br />
-          테스트케이스-2: {submitResultTestcase2Result}
+          <AssignmentIcon />
+          &nbsp;테스트케이스-2: {submitResultTestcase2Result}
           {submitGradeResult2()}
           <br />
           <br />
-          히든 테스트케이스-3: {submitResultTestcase3Result}
+          <AssignmentIcon />
+          &nbsp;히든 테스트케이스-3: {submitResultTestcase3Result}
           <br />
           <br />
-          히든 테스트케이스-4: {submitResultTestcase4Result}
+          <AssignmentIcon />
+          &nbsp;히든 테스트케이스-4: {submitResultTestcase4Result}
           <br />
           <br />
-          히든 테스트케이스-5: {submitResultTestcase5Result}
+          <AssignmentIcon />
+          &nbsp;히든 테스트케이스-5: {submitResultTestcase5Result}
         </div>
       );
     } else if (submitResultPage1Content == 1) {
       return (
         <div className="submitContent2">
-          <div>control complexity score: {submitResultMultimetricOutput1}</div>
+          <div>
+            <AssignmentIcon />
+            &nbsp;control complexity score: {submitResultMultimetricOutput1}
+          </div>
           <br />
-          <div>data complexity score: {submitResultMultimetricOutput2}</div>
-          <br /> <div>halstead score: {submitResultMultimetricOutput3}</div>
-          <br /> <div>loc score: {submitResultMultimetricOutput4}</div>
+          <div>
+            <AssignmentIcon />
+            &nbsp;data complexity score: {submitResultMultimetricOutput2}
+          </div>
+          <br />{" "}
+          <div>
+            <AssignmentIcon />
+            &nbsp;halstead score: {submitResultMultimetricOutput3}
+          </div>
+          <br />{" "}
+          <div>
+            <AssignmentIcon />
+            &nbsp;loc score: {submitResultMultimetricOutput4}
+          </div>
         </div>
       );
     } else {
       return (
         <div className="submitContent3">
-          <div>eradicate score: {submitResultPylama1Score}</div>
+          <div>
+            <AssignmentIcon />
+            &nbsp;eradicate score: {submitResultPylama1Score}
+          </div>
           {submitResultPylama1Message.map((message) => {
-            return <div>{message}</div>;
+            return <div style={{ paddingLeft: "30px" }}>{message}</div>;
           })}
           <br />
-          <div>mypy score: {submitResultPylama2Score}</div>
+          <div>
+            <AssignmentIcon />
+            &nbsp;mypy score: {submitResultPylama2Score}
+          </div>
           {submitResultPylama2Message.map((message) => {
-            return <div>{message}</div>;
+            return <div style={{ paddingLeft: "30px" }}>{message}</div>;
           })}
-          <br /> <div>pycodestyle score: {submitResultPylama3Score}</div>
+          <br />{" "}
+          <div>
+            <AssignmentIcon />
+            &nbsp;pycodestyle score: {submitResultPylama3Score}
+          </div>
           {submitResultPylama3Message.map((message) => {
-            return <div>{message}</div>;
+            return <div style={{ paddingLeft: "30px" }}>{message}</div>;
           })}
-          <br /> <div>pylint score: {submitResultPylama4Score}</div>
+          <br />{" "}
+          <div>
+            <AssignmentIcon />
+            &nbsp;pylint score: {submitResultPylama4Score}
+          </div>
           {submitResultPylama4Message.map((message) => {
-            return <div>{message}</div>;
+            return <div style={{ paddingLeft: "30px" }}>{message}</div>;
           })}
-          <br /> <div>radon score: {submitResultPylama5Score}</div>
+          <br />{" "}
+          <div>
+            <AssignmentIcon />
+            &nbsp;radon score: {submitResultPylama5Score}
+          </div>
           {submitResultPylama5Message.map((message) => {
-            return <div>{message}</div>;
+            return <div style={{ paddingLeft: "30px" }}>{message}</div>;
           })}
         </div>
       );
@@ -436,19 +475,19 @@ const Right = (props) => {
         {
           name: "efficiency",
           score:
-            (submitResultMultimetricOutput1 +
-              submitResultMultimetricOutput2 +
-              submitResultMultimetricOutput3 +
-              submitResultMultimetricOutput4) /
-            4,
+            submitResultMultimetricOutput1 +
+            submitResultMultimetricOutput2 +
+            submitResultMultimetricOutput3 +
+            submitResultMultimetricOutput4,
         },
         {
           name: "readability",
           score:
-            (submitResultPylama1Score + submitResultPylama2Score,
-            +submitResultPylama3Score +
-              submitResultPylama4Score +
-              submitResultPylama5Score) / 5,
+            submitResultPylama1Score +
+            submitResultPylama2Score +
+            submitResultPylama3Score +
+            submitResultPylama4Score +
+            submitResultPylama5Score,
         },
       ]);
     }

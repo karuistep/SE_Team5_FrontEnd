@@ -7,7 +7,6 @@ import Select from "@mui/material/Select";
 import "./Left.scss";
 
 const Left = (props) => {
-  const [problemTitle, setProblemTitle] = useState("");
   const [problemContent, setProblemContent] = useState("");
   const [problemConstraint, setProblemConstraint] = useState("");
   const [showedTestcase1Input, setShowedTestcase1Input] = useState("");
@@ -64,7 +63,6 @@ const Left = (props) => {
       props.problem !== undefined &&
       props.problem[props.selectedProblemIndex] !== undefined
     ) {
-      setProblemTitle(props.problem[props.selectedProblemIndex].title);
       setProblemContent(props.problem[props.selectedProblemIndex].description);
       setProblemConstraint(
         props.problem[props.selectedProblemIndex].restriction
@@ -90,7 +88,8 @@ const Left = (props) => {
     <div className="left">
       <div className="problem">
         <div className="problemHeader">
-          <FormControl sx={{ m: 1, width: "100%" }} size="small">
+          problem :
+          <FormControl sx={{ m: 1, width: "75%" }} size="small">
             <InputLabel
               id="demo-select-small"
               style={{ color: "#000000" }}
@@ -111,9 +110,6 @@ const Left = (props) => {
           </FormControl>
         </div>
         <div className="problemContent">
-          <div className="problemContentHeader">
-            Problem :&nbsp;{problemTitle}
-          </div>
           <div className="problemContentText">{problemContent}</div>
         </div>
         <div className="problemConstraint">

@@ -9,6 +9,7 @@
 }
 .left .problem .problemHeader {
   height: 50px;
+  padding: 0 15px;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -25,9 +26,10 @@
   font-weight: 500;
 }
 .left .problem .problemContent .problemContentText {
-  padding: 0 10px;
+  padding: 0 15px;
   color: #ffffff;
   font-weight: 500;
+  line-height: 40px;
 }
 .left .problem .problemConstraint {
   height: calc(50% - 30px);
@@ -42,6 +44,7 @@
   padding: 0 10px;
   color: #ffffff;
   font-weight: 500;
+  line-height: 40px;
 }
 .left .testcase {
   height: calc(50% - 25px);

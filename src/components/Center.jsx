@@ -1,9 +1,12 @@
 import SaveIcon from "@mui/icons-material/Save";
 import CodeEditor from "./CodeEditor";
+import CodeDiff from "./CodeDiff";
 import FolderIcon from "@mui/icons-material/Folder";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import SimCardDownloadIcon from "@mui/icons-material/SimCardDownload";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Button from "react-bootstrap/Button";
 import {
   getProblemDetail,
@@ -13,8 +16,15 @@ import {
   submitCode,
 } from "../api/api";
 import "./Center.scss";
+import { useState } from "react";
 
 const Center = (props) => {
+  // codeDiff 에디터의 확장여부를 저장하는 변수
+  const [codeDiffIsExpand, setCodeDiffIsExpand] = useState(0);
+
+  // 제출 후 받은 정답 코드를 임시 저장하는 변수
+  const [solutionCode, setSolutionCode] = useState("");
+
   const handleSaveCode = () => {
     // 코드를 슬롯에 저장하는 API요청. 저장 후 getProblemDetail을 실행
     saveCodeInDB(
@@ -120,6 +130,7 @@ const Center = (props) => {
 
   // 코드 실행
   const handleExecuteCode = () => {
+    props.setCodeEditorIsExpand(0);
     props.setRightSection(1);
     executeCode(props.code)
       .then((res) => {
@@ -136,6 +147,7 @@ const Center = (props) => {
 
   // 코드 채점
   const handleGradeCode = () => {
+    props.setCodeEditorIsExpand(0);
     props.setRightSection(2);
     gradeCode(props.code, props.selectedProblemID)
       .then((res) => {
@@ -160,6 +172,9 @@ const Center = (props) => {
         if (res.data.result.msg === "fail") {
           alert("You have already submitted it 3 times. Cannot submit more.");
         } else {
+          setSolutionCode(res.data.solution_code);
+          props.setCodeEditorIsExpand(0);
+          props.setCenterSection(2);
           props.setRightSection(3);
           props.setSubmitResult(res.data);
         }
@@ -171,164 +186,460 @@ const Center = (props) => {
       });
   };
 
-  return (
-    <div className="center">
-      <div className="centerHeader">
-        Code Editor
-        <SaveIcon
-          type="button"
-          style={{ margin: "auto 15px", color: "#FFFFFF" }}
-          onClick={handleSaveCode}
-          disabled={props.submittedWait}
-        />
-        <div className="centerSavedBox1">
-          <div className="centerSavedBox1Title">code slot</div>
-          <div
-            class="btn-group"
-            role="group"
-            aria-label="Basic radio toggle button group"
-          >
-            <input
-              type="radio"
-              class="btn-check"
-              name="btnradio"
-              id="btnradio1"
-              autocomplete="off"
-              value={0}
-              checked={props.selectedCode == 0}
-              onClick={handleChangeCodeSlot}
-              disabled={props.submittedWait}
-            />
-            <label class="btn btn-outline-secondary" for="btnradio1">
-              1
-            </label>
+  // codeEditor 에디터 좌우로 확장
+  const handleCodeEditorExpand = () => {
+    props.setCodeEditorIsExpand(1);
+  };
 
-            <input
-              type="radio"
-              class="btn-check"
-              name="btnradio"
-              id="btnradio2"
-              autocomplete="off"
-              value={1}
-              checked={props.selectedCode == 1}
-              onClick={handleChangeCodeSlot}
-              disabled={props.submittedWait}
-            />
-            <label class="btn btn-outline-secondary" for="btnradio2">
-              2
-            </label>
+  // codeEditor 에디터 좌우로 축소
+  const handleCodeEditorShrink = () => {
+    props.setCodeEditorIsExpand(0);
+  };
 
-            <input
-              type="radio"
-              class="btn-check"
-              name="btnradio"
-              id="btnradio3"
-              autocomplete="off"
-              value={2}
-              checked={props.selectedCode == 2}
-              onClick={handleChangeCodeSlot}
+  // codeDiff 에디터 좌우로 확장
+  const handleCodeDiffExpand = () => {
+    setCodeDiffIsExpand(1);
+  };
+
+  // codeDiff 에디터 좌우로 축소
+  const handleCodeDiffShrink = () => {
+    setCodeDiffIsExpand(0);
+  };
+
+  // 제출 결과창에서 다시 코드 입력창으로 돌아가는 함수
+  const handleGoBackToCode = () => {
+    setCodeDiffIsExpand(0);
+    props.setCenterSection(1);
+    props.setRightSection(1);
+  };
+
+  if (props.centerSection == 1) {
+    if (props.codeEditorIsExpand == 0) {
+      return (
+        <div className="center">
+          <div className="centerHeader">
+            Code Editor
+            <SaveIcon
+              type="button"
+              style={{ margin: "auto 15px", color: "#FFFFFF" }}
+              onClick={handleSaveCode}
               disabled={props.submittedWait}
             />
-            <label class="btn btn-outline-secondary" for="btnradio3">
-              3
-            </label>
+            <div className="centerSavedBox1">
+              <div className="centerSavedBox1Title">code slot</div>
+              <div
+                class="btn-group"
+                role="group"
+                aria-label="Basic radio toggle button group"
+              >
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnradio"
+                  id="btnradio1"
+                  autocomplete="off"
+                  value={0}
+                  checked={props.selectedCode == 0}
+                  onClick={handleChangeCodeSlot}
+                  disabled={props.submittedWait}
+                />
+                <label class="btn btn-outline-secondary" for="btnradio1">
+                  1
+                </label>
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnradio"
+                  id="btnradio2"
+                  autocomplete="off"
+                  value={1}
+                  checked={props.selectedCode == 1}
+                  onClick={handleChangeCodeSlot}
+                  disabled={props.submittedWait}
+                />
+                <label class="btn btn-outline-secondary" for="btnradio2">
+                  2
+                </label>
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnradio"
+                  id="btnradio3"
+                  autocomplete="off"
+                  value={2}
+                  checked={props.selectedCode == 2}
+                  onClick={handleChangeCodeSlot}
+                  disabled={props.submittedWait}
+                />
+                <label class="btn btn-outline-secondary" for="btnradio3">
+                  3
+                </label>
+              </div>
+            </div>
+            <div className="centerSavedBox2">
+              <div className="centerSavedBox2Title">submitted</div>
+              <div
+                class="btn-group"
+                role="group"
+                aria-label="Basic outlined example"
+              >
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  value={0}
+                  disabled={!props.isSubmitted1 || props.submittedWait}
+                  onClick={handleLoadSubmitCode}
+                >
+                  1
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  value={1}
+                  disabled={!props.isSubmitted2 || props.submittedWait}
+                  onClick={handleLoadSubmitCode}
+                >
+                  2
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  value={2}
+                  disabled={!props.isSubmitted3 || props.submittedWait}
+                  onClick={handleLoadSubmitCode}
+                >
+                  3
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="centerContent">
+            <Button
+              variant="secondary"
+              style={{
+                position: "absolute",
+                bottom: "10px",
+                right: "10px",
+                zIndex: 1,
+              }}
+              onClick={handleCodeEditorExpand}
+              disabled={props.submittedWait}
+            >
+              <ArrowForwardIosIcon />
+            </Button>
+            <CodeEditor code={props.code} setCode={props.setCode} />
+          </div>
+          <div className="centerFooter">
+            <FolderIcon
+              type="button"
+              style={{ marginRight: "10px", color: "#FFFFFF" }}
+              onClick={handleLoadCode}
+              disabled={props.submittedWait}
+            />
+            <RefreshIcon
+              type="button"
+              style={{ marginRight: "10px", color: "#FFFFFF" }}
+              onClick={handleRefreshCode}
+              disabled={props.submittedWait}
+            />
+            <FileCopyIcon
+              type="button"
+              style={{ marginRight: "10px", color: "#FFFFFF" }}
+              onClick={handleCopyCode}
+              disabled={props.submittedWait}
+            />
+            <SimCardDownloadIcon
+              type="button"
+              style={{ marginRight: "10px", color: "#FFFFFF" }}
+              onClick={handleDownloadCode}
+              disabled={props.submittedWait}
+            />
+            <Button
+              variant="secondary"
+              style={{
+                marginRight: "10px",
+              }}
+              onClick={handleExecuteCode}
+              disabled={props.submittedWait}
+            >
+              Execute
+            </Button>
+            <Button
+              variant="secondary"
+              style={{
+                marginRight: "10px",
+              }}
+              onClick={handleGradeCode}
+              disabled={props.submittedWait}
+            >
+              Score
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleSubmitCode}
+              disabled={props.submittedWait}
+            >
+              Submit
+            </Button>
           </div>
         </div>
-        <div className="centerSavedBox2">
-          <div className="centerSavedBox2Title">submitted</div>
-          <div
-            class="btn-group"
-            role="group"
-            aria-label="Basic outlined example"
-          >
-            <button
+      );
+    } else {
+      return (
+        <div className="centerEx">
+          <div className="centerExHeader">
+            Code Editor
+            <SaveIcon
               type="button"
-              class="btn btn-outline-secondary"
-              value={0}
-              disabled={!props.isSubmitted1 || props.submittedWait}
-              onClick={handleLoadSubmitCode}
+              style={{ margin: "auto 15px auto auto", color: "#FFFFFF" }}
+              onClick={handleSaveCode}
+              disabled={props.submittedWait}
+            />
+            <div className="centerSavedBox1">
+              <div className="centerSavedBox1Title">code slot</div>
+              <div
+                class="btn-group"
+                role="group"
+                aria-label="Basic radio toggle button group"
+              >
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnradio"
+                  id="btnradio1"
+                  autocomplete="off"
+                  value={0}
+                  checked={props.selectedCode == 0}
+                  onClick={handleChangeCodeSlot}
+                  disabled={props.submittedWait}
+                />
+                <label class="btn btn-outline-secondary" for="btnradio1">
+                  1
+                </label>
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnradio"
+                  id="btnradio2"
+                  autocomplete="off"
+                  value={1}
+                  checked={props.selectedCode == 1}
+                  onClick={handleChangeCodeSlot}
+                  disabled={props.submittedWait}
+                />
+                <label class="btn btn-outline-secondary" for="btnradio2">
+                  2
+                </label>
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnradio"
+                  id="btnradio3"
+                  autocomplete="off"
+                  value={2}
+                  checked={props.selectedCode == 2}
+                  onClick={handleChangeCodeSlot}
+                  disabled={props.submittedWait}
+                />
+                <label class="btn btn-outline-secondary" for="btnradio3">
+                  3
+                </label>
+              </div>
+            </div>
+            <div className="centerSavedBox2">
+              <div className="centerSavedBox2Title">submitted</div>
+              <div
+                class="btn-group"
+                role="group"
+                aria-label="Basic outlined example"
+              >
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  value={0}
+                  disabled={!props.isSubmitted1 || props.submittedWait}
+                  onClick={handleLoadSubmitCode}
+                >
+                  1
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  value={1}
+                  disabled={!props.isSubmitted2 || props.submittedWait}
+                  onClick={handleLoadSubmitCode}
+                >
+                  2
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  value={2}
+                  disabled={!props.isSubmitted3 || props.submittedWait}
+                  onClick={handleLoadSubmitCode}
+                >
+                  3
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="centerExContent">
+            <Button
+              variant="secondary"
+              style={{
+                position: "absolute",
+                bottom: "10px",
+                right: "10px",
+                zIndex: 1,
+              }}
+              onClick={handleCodeEditorShrink}
+              disabled={props.submittedWait}
             >
-              1
-            </button>
-            <button
+              <ArrowBackIosNewIcon />
+            </Button>
+            <CodeEditor code={props.code} setCode={props.setCode} />
+          </div>
+          <div className="centerExFooter">
+            <FolderIcon
               type="button"
-              class="btn btn-outline-secondary"
-              value={1}
-              disabled={!props.isSubmitted2 || props.submittedWait}
-              onClick={handleLoadSubmitCode}
-            >
-              2
-            </button>
-            <button
+              style={{ marginRight: "10px", color: "#FFFFFF" }}
+              onClick={handleLoadCode}
+              disabled={props.submittedWait}
+            />
+            <RefreshIcon
               type="button"
-              class="btn btn-outline-secondary"
-              value={2}
-              disabled={!props.isSubmitted3 || props.submittedWait}
-              onClick={handleLoadSubmitCode}
+              style={{ marginRight: "10px", color: "#FFFFFF" }}
+              onClick={handleRefreshCode}
+              disabled={props.submittedWait}
+            />
+            <FileCopyIcon
+              type="button"
+              style={{ marginRight: "10px", color: "#FFFFFF" }}
+              onClick={handleCopyCode}
+              disabled={props.submittedWait}
+            />
+            <SimCardDownloadIcon
+              type="button"
+              style={{ marginRight: "auto", color: "#FFFFFF" }}
+              onClick={handleDownloadCode}
+              disabled={props.submittedWait}
+            />
+            <Button
+              variant="secondary"
+              style={{
+                marginRight: "10px",
+              }}
+              onClick={handleExecuteCode}
+              disabled={props.submittedWait}
             >
-              3
-            </button>
+              Execute
+            </Button>
+            <Button
+              variant="secondary"
+              style={{
+                marginRight: "10px",
+              }}
+              onClick={handleGradeCode}
+              disabled={props.submittedWait}
+            >
+              Score
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleSubmitCode}
+              disabled={props.submittedWait}
+            >
+              Submit
+            </Button>
           </div>
         </div>
-      </div>
-      <div className="centerContent">
-        <CodeEditor code={props.code} setCode={props.setCode} />
-      </div>
-      <div className="centerFooter">
-        <FolderIcon
-          type="button"
-          style={{ marginRight: "10px", color: "#FFFFFF" }}
-          onClick={handleLoadCode}
-          disabled={props.submittedWait}
-        />
-        <RefreshIcon
-          type="button"
-          style={{ marginRight: "10px", color: "#FFFFFF" }}
-          onClick={handleRefreshCode}
-          disabled={props.submittedWait}
-        />
-        <FileCopyIcon
-          type="button"
-          style={{ marginRight: "10px", color: "#FFFFFF" }}
-          onClick={handleCopyCode}
-          disabled={props.submittedWait}
-        />
-        <SimCardDownloadIcon
-          type="button"
-          style={{ marginRight: "10px", color: "#FFFFFF" }}
-          onClick={handleDownloadCode}
-          disabled={props.submittedWait}
-        />
-        <Button
-          variant="secondary"
-          style={{
-            marginRight: "10px",
-          }}
-          onClick={handleExecuteCode}
-          disabled={props.submittedWait}
-        >
-          Execute
-        </Button>
-        <Button
-          variant="secondary"
-          style={{
-            marginRight: "10px",
-          }}
-          onClick={handleGradeCode}
-          disabled={props.submittedWait}
-        >
-          Score
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={handleSubmitCode}
-          disabled={props.submittedWait}
-        >
-          Submit
-        </Button>
-      </div>
-    </div>
-  );
+      );
+    }
+  } else {
+    if (codeDiffIsExpand == 0) {
+      return (
+        <div className="center2">
+          <div className="center2Header">
+            Code Diff : Submitted Code Analysis
+          </div>
+          <div className="center2Content">
+            <Button
+              variant="secondary"
+              style={{
+                position: "absolute",
+                bottom: "10px",
+                left: "10px",
+                zIndex: 1,
+              }}
+              onClick={handleCodeDiffExpand}
+            >
+              <ArrowBackIosNewIcon />
+            </Button>
+            <CodeDiff
+              code={props.code}
+              solutionCode={solutionCode}
+              expanded={false}
+            />
+          </div>
+          <div className="center2Footer">
+            <Button
+              variant="secondary"
+              style={{
+                marginRight: "10px",
+              }}
+              onClick={handleGoBackToCode}
+              disabled={props.submittedWait}
+            >
+              Go Back To Editor
+            </Button>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="center2Ex">
+          <div className="center2ExHeader">
+            Code Diff : Submitted Code Analysis
+          </div>
+          <div className="center2ExContent">
+            <Button
+              variant="secondary"
+              style={{
+                position: "absolute",
+                bottom: "10px",
+                left: "10px",
+                zIndex: 1,
+              }}
+              onClick={handleCodeDiffShrink}
+            >
+              <ArrowForwardIosIcon />
+            </Button>
+            <CodeDiff
+              code={props.code}
+              solutionCode={solutionCode}
+              expanded={true}
+            />
+          </div>
+          <div className="center2ExFooter">
+            <Button
+              variant="secondary"
+              style={{
+                marginRight: "10px",
+              }}
+              onClick={handleGoBackToCode}
+              disabled={props.submittedWait}
+            >
+              Go Back To Editor
+            </Button>
+          </div>
+        </div>
+      );
+    }
+  }
 };
 
 export default Center;
