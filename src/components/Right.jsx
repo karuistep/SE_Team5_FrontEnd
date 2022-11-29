@@ -170,7 +170,7 @@ const Right = (props) => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="score (average)" fill="#8884d8" />
+              <Bar dataKey="score" fill="#8884d8" />
             </BarChart>
           </div>
           <div className="submitResult1Tap">
@@ -347,7 +347,7 @@ const Right = (props) => {
 
   // 제출결과가 변경될 때마다 제출 관련 변수들을 변경
   useEffect(() => {
-    console.log(props.submitResult);
+    console.log("제출결과: ", props.submitResult);
     if (
       props.submitResult !== undefined &&
       props.submitResult !== {} &&
@@ -454,7 +454,7 @@ const Right = (props) => {
     }
   }, [props.submitResult]);
 
-  console.log(submitData);
+  console.log("현재 차트 데이터는 :", submitData);
 
   // 사용자가 실행버튼을 누르면 실행화면을 보여준다
   if (props.rightSection == 1) {
