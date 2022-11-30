@@ -151,6 +151,7 @@ const Center = (props) => {
     props.setRightSection(2);
     gradeCode(props.code, props.selectedProblemID)
       .then((res) => {
+        console.log("채점결과: ", res.data);
         props.setGradeResult(res.data);
       })
       .catch((err) => {
@@ -169,8 +170,10 @@ const Center = (props) => {
     )
       .then((res) => {
         console.log("제출로 받은 데이터: ", res.data);
-        if (res.data.result.msg === "fail") {
+        if (res.data.result.msg === "no_submission_left") {
           alert("You have already submitted it 3 times. Cannot submit more.");
+        } else if (res.data.result.msg === "fail") {
+          alert("Your Code has an Error. Please check your code!");
         } else {
           setSolutionCode(res.data.solution_code);
           props.setCodeEditorIsExpand(0);

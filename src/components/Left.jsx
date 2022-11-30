@@ -135,7 +135,7 @@ const Left = (props) => {
           <div className="testcase1Content">
             <div style={{ display: "flex" }}>
               <div style={{ width: "45%" }}>Input :</div>
-              <div>Output :</div>
+              <div>Expected Output :</div>
             </div>
             <div style={{ display: "flex" }}>
               <div style={{ width: "45%", color: "#6187FF" }}>
@@ -172,7 +172,7 @@ const Left = (props) => {
           <div className="testcase2Content">
             <div style={{ display: "flex" }}>
               <div style={{ width: "45%" }}>Input :</div>
-              <div>Output :</div>
+              <div>Expected Output :</div>
             </div>
             <div style={{ display: "flex" }}>
               <div style={{ width: "45%", color: "#6187FF" }}>

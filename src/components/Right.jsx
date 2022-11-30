@@ -16,10 +16,12 @@ const Right = (props) => {
   // 채점 결과 점수와 테스트케이스 1,2,3(오픈), 4,5,6(히든)의 결과와 입/출력, 사용자 출력값을 저장하는 변수
   const [gradeScore, setGradeScore] = useState(0);
   const [testcase1Result, setTestcase1Result] = useState("");
+  const [testcase1Input, setTestcase1Input] = useState("");
   const [testcase1CorrectOutput, setTestcase1CorrectOutput] = useState("");
   const [testcase1UserOutput, setTestcase1UserOutput] = useState("");
 
   const [testcase2Result, setTestcase2Result] = useState("");
+  const [testcase2Input, setTestcase2Input] = useState("");
   const [testcase2CorrectOutput, setTestcase2CorrectOutput] = useState("");
   const [testcase2UserOutput, setTestcase2UserOutput] = useState("");
 
@@ -72,12 +74,16 @@ const Right = (props) => {
   const [submitResultGradeScore, setSubmitResultGradeScore] = useState(0);
   const [submitResultTestcase1Result, setSubmitResultTestcase1Result] =
     useState("");
+  const [submitResultTestcase1Input, setSubmitResultTestcase1Input] =
+    useState("");
   const [submitResultTestcase1Output, setSubmitResultTestcase1Output] =
     useState("");
   const [submitResultTestcase1UserOutput, setSubmitResultTestcase1UserOutput] =
     useState("");
 
   const [submitResultTestcase2Result, setSubmitResultTestcase2Result] =
+    useState("");
+  const [submitResultTestcase2Input, setSubmitResultTestcase2Input] =
     useState("");
   const [submitResultTestcase2Output, setSubmitResultTestcase2Output] =
     useState("");
@@ -99,8 +105,10 @@ const Right = (props) => {
   const gradeResult1 = () => {
     if (testcase1Result == "실패") {
       return (
-        <div>
-          Output : {testcase1CorrectOutput}
+        <div style={{ paddingLeft: "30px" }}>
+          Input : {testcase1Input}
+          <br />
+          Expected Output : {testcase1CorrectOutput}
           <br />
           Your Output : {testcase1UserOutput}
         </div>
@@ -112,8 +120,10 @@ const Right = (props) => {
   const gradeResult2 = () => {
     if (testcase2Result == "실패") {
       return (
-        <div>
-          Output : {testcase2CorrectOutput}
+        <div style={{ paddingLeft: "30px" }}>
+          Input : {testcase2Input}
+          <br />
+          Expected Output : {testcase2CorrectOutput}
           <br />
           Your Output : {testcase2UserOutput}
         </div>
@@ -126,7 +136,9 @@ const Right = (props) => {
     if (submitResultTestcase1Result == "실패") {
       return (
         <div style={{ paddingLeft: "30px" }}>
-          Output : {submitResultTestcase1Output}
+          Input : {submitResultTestcase1Input}
+          <br />
+          Expected Output : {submitResultTestcase1Output}
           <br />
           Your Output : {submitResultTestcase1UserOutput}
         </div>
@@ -139,7 +151,9 @@ const Right = (props) => {
     if (submitResultTestcase2Result == "실패") {
       return (
         <div style={{ paddingLeft: "30px" }}>
-          Output : {submitResultTestcase2Output}
+          Input : {submitResultTestcase2Input}
+          <br />
+          Expected Output : {submitResultTestcase2Output}
           <br />
           Your Output : {submitResultTestcase2UserOutput}
         </div>
@@ -367,12 +381,14 @@ const Right = (props) => {
     ) {
       setGradeScore(props.gradeResult.score);
       setTestcase1Result(props.gradeResult.open_results[0].result);
+      setTestcase1Input(props.gradeResult.open_results[0].input);
       setTestcase1CorrectOutput(
         props.gradeResult.open_results[0].correct_output
       );
       setTestcase1UserOutput(props.gradeResult.open_results[0].your_output);
 
       setTestcase2Result(props.gradeResult.open_results[1].result);
+      setTestcase2Input(props.gradeResult.open_results[1].input);
       setTestcase2CorrectOutput(
         props.gradeResult.open_results[1].correct_output
       );
@@ -440,6 +456,9 @@ const Right = (props) => {
       setSubmitResultTestcase1Result(
         props.submitResult.testcase_output.open_results[0].result
       );
+      setSubmitResultTestcase1Input(
+        props.submitResult.testcase_output.open_results[0].input
+      );
       setSubmitResultTestcase1Output(
         props.submitResult.testcase_output.open_results[0].correct_output
       );
@@ -449,6 +468,9 @@ const Right = (props) => {
 
       setSubmitResultTestcase2Result(
         props.submitResult.testcase_output.open_results[1].result
+      );
+      setSubmitResultTestcase2Input(
+        props.submitResult.testcase_output.open_results[1].input
       );
       setSubmitResultTestcase2Output(
         props.submitResult.testcase_output.open_results[1].correct_output
@@ -469,31 +491,43 @@ const Right = (props) => {
 
       setSubmitResultPage(0);
       setSubmitResultPage1Content(0);
-
-      setSubmitData([
-        { name: "function", score: submitResultGradeScore },
-        {
-          name: "efficiency",
-          score:
-            submitResultMultimetricOutput1 +
-            submitResultMultimetricOutput2 +
-            submitResultMultimetricOutput3 +
-            submitResultMultimetricOutput4,
-        },
-        {
-          name: "readability",
-          score:
-            submitResultPylama1Score +
-            submitResultPylama2Score +
-            submitResultPylama3Score +
-            submitResultPylama4Score +
-            submitResultPylama5Score,
-        },
-      ]);
     }
   }, [props.submitResult]);
 
-  console.log("현재 차트 데이터는 :", submitData);
+  // 제출 결과 중 점수들이 바뀔 때마다 그래프 데이터를 갱신해준다
+  useEffect(() => {
+    setSubmitData([
+      { name: "function", score: submitResultGradeScore },
+      {
+        name: "efficiency",
+        score:
+          submitResultMultimetricOutput1 +
+          submitResultMultimetricOutput2 +
+          submitResultMultimetricOutput3 +
+          submitResultMultimetricOutput4,
+      },
+      {
+        name: "readability",
+        score:
+          submitResultPylama1Score +
+          submitResultPylama2Score +
+          submitResultPylama3Score +
+          submitResultPylama4Score +
+          submitResultPylama5Score,
+      },
+    ]);
+  }, [
+    submitResultGradeScore,
+    submitResultMultimetricOutput1,
+    submitResultMultimetricOutput2,
+    submitResultMultimetricOutput3,
+    submitResultMultimetricOutput4,
+    submitResultPylama1Score,
+    submitResultPylama2Score,
+    submitResultPylama3Score,
+    submitResultPylama4Score,
+    submitResultPylama5Score,
+  ]);
 
   // 사용자가 실행버튼을 누르면 실행화면을 보여준다
   if (props.rightSection == 1) {

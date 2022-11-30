@@ -90,6 +90,10 @@
 .right3 .right3Content .submitResult1 .submitResult1Content {
   height: calc(100% - 438px);
 }
+.right3 .right3Content .submitResult1 .submitResult1Content .submitContent1 {
+  height: 100%;
+  overflow: scroll;
+}
 .right3 .right3Content .submitResult1 .submitResult1Content .submitContent3 {
   height: 100%;
   overflow: scroll;

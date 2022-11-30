@@ -98,6 +98,8 @@
       .submitResult1Content {
         height: calc(100% - 438px);
         .submitContent1 {
+          height: 100%;
+          overflow: scroll;
         }
 
         .submitContent2 {

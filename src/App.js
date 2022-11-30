@@ -8,6 +8,7 @@ import {
   getAssignment,
   getProblems,
   getProblemDetail,
+  getRecentProblem,
 } from "./api/api";
 import "./App.scss";
 
@@ -38,6 +39,28 @@ function App() {
   const [submittedWait, setSubmittedWait] = useState(0); // 제출이 진행되고 있는 지를 저장하는 변수
   const [codeEditorIsExpand, setCodeEditorIsExpand] = useState(0); // 코드에디터의 확장여부를 저장하는 변수
 
+  // 제출 중 로딩 바를 표시해주는 함수
+  const handleSpinner = () => {
+    if (submittedWait === 1) {
+      return (
+        <div
+          class="spinner-border text-secondary"
+          role="status"
+          style={{
+            position: "absolute",
+            top: "565px",
+            left: "660px",
+            zIndex: "2",
+            width: "120px",
+            height: "120px",
+          }}
+        >
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      );
+    }
+  };
+
   // 처음 로드할 때 한 번만 강의 목록을 가져온다
   useEffect(() => {
     getLecture()
@@ -48,6 +71,25 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
+  }, []);
+
+  // 처음 로드할 때 사용자가 마지막으로 풀었던 문제정보를 가져온다
+  useEffect(() => {
+    setCenterSection(1);
+    setRightSection(1);
+    setSelectedCode(0);
+    getRecentProblem(0)
+      .then((res) => {
+        console.log(res.data);
+        setSelectedProblemIndex(Number(res.data.idx) - 1);
+        setSelectedProblemID(res.data.problem_id);
+        setTestcase(res.data[1]);
+        setUserCode(res.data[2]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setCodeEditorIsExpand(0);
   }, []);
 
   // 선택된 강의 ID가 변경되었을 때 해당 강의 아래에 있는 과제 목록을 가져온다
@@ -153,6 +195,7 @@ function App() {
           setSelectedAssignmentIndex={setSelectedAssignmentIndex}
         />
         <div className="main">
+          {handleSpinner()}
           <Left
             code={code}
             problem={problem}

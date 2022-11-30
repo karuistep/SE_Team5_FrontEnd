@@ -34,8 +34,8 @@ const getProblemDetail = async (user_id, problem_id) => {
   return await instance.get(`/study/${user_id}/${problem_id}/`);
 };
 
-const getRecentProblem = async () => {
-  return await instance.get(`/study/recent`);
+const getRecentProblem = async (user_id) => {
+  return await instance.get(`/study/recent/${user_id}/`);
 };
 
 const saveCodeInDB = async (problem, user, user_code, code_idx) => {
