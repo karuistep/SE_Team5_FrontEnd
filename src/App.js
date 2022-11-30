@@ -38,6 +38,7 @@ function App() {
   const [submitResult, setSubmitResult] = useState({});
   const [submittedWait, setSubmittedWait] = useState(0); // 제출이 진행되고 있는 지를 저장하는 변수
   const [codeEditorIsExpand, setCodeEditorIsExpand] = useState(0); // 코드에디터의 확장여부를 저장하는 변수
+  const [skeletonCode, setSkeletonCode] = useState(""); // 스켈레톤 코드를 저장하는 변수
 
   // 제출 중 로딩 바를 표시해주는 함수
   const handleSpinner = () => {
@@ -80,9 +81,10 @@ function App() {
     setSelectedCode(0);
     getRecentProblem(0)
       .then((res) => {
-        console.log(res.data);
+        console.log("최근 문제정보를 가져옵니다: ", res.data);
         setSelectedProblemIndex(Number(res.data.idx) - 1);
         setSelectedProblemID(res.data.problem_id);
+        setSkeletonCode(res.data[0].skeleton);
         setTestcase(res.data[1]);
         setUserCode(res.data[2]);
       })
@@ -146,6 +148,7 @@ function App() {
       setSelectedCode(0);
       getProblemDetail(0, selectedProblemID)
         .then((res) => {
+          setSkeletonCode(res.data[0][0].skeleton);
           setTestcase(res.data[1]);
           setUserCode(res.data[2]);
         })
@@ -219,6 +222,7 @@ function App() {
             excuteErrorLine={excuteErrorLine}
             submittedWait={submittedWait}
             codeEditorIsExpand={codeEditorIsExpand}
+            skeletonCode={skeletonCode}
             setCenterSection={setCenterSection}
             setCode={setCode}
             setUserCode={setUserCode}

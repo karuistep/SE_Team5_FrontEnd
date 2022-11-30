@@ -101,7 +101,7 @@ const Center = (props) => {
 
   // 코드 새로고침
   const handleRefreshCode = () => {
-    props.setCode("default_code");
+    props.setCode(props.skeletonCode);
   };
 
   // 코드 복사
@@ -169,7 +169,6 @@ const Center = (props) => {
       Number(props.selectedCode) + 1
     )
       .then((res) => {
-        console.log("제출로 받은 데이터: ", res.data);
         if (res.data.result.msg === "no_submission_left") {
           alert("You have already submitted it 3 times. Cannot submit more.");
         } else if (res.data.result.msg === "fail") {

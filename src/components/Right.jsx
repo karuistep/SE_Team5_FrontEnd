@@ -402,7 +402,6 @@ const Right = (props) => {
 
   // 제출결과가 변경될 때마다 제출 관련 변수들을 변경
   useEffect(() => {
-    console.log("제출결과: ", props.submitResult);
     if (
       props.submitResult !== undefined &&
       props.submitResult !== {} &&
