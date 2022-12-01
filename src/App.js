@@ -148,7 +148,7 @@ function App() {
       setSelectedCode(0);
       getProblemDetail(0, selectedProblemID)
         .then((res) => {
-          console.log("문제정보 가져오기: ", res.data[0][0].title);
+          console.log("문제정보 가져오기: ", res.data);
           setSkeletonCode(res.data[0][0].skeleton);
           setTestcase(res.data[1]);
           setUserCode(res.data[2]);
@@ -159,6 +159,18 @@ function App() {
       setCodeEditorIsExpand(0);
     }
   }, [problem, selectedProblemIndex]);
+
+  // 코드 제출하였을 때 문제정보를 한번 더 가져와서 제출코드를 업데이트한다.
+  useEffect(() => {
+    getProblemDetail(0, selectedProblemID)
+      .then((res) => {
+        console.log("문제정보 가져오기: ", res.data);
+        setUserCode(res.data[2]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [rightSection]);
 
   // 선택 코드슬롯이 변경되었을 때 현재 코드 변경 및 제출코드 블락 설정
   useEffect(() => {

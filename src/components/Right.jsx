@@ -268,16 +268,22 @@ const Right = (props) => {
             />
           </div>
           <div className="submitResult2Content">
-            code explanation: <br />
-            {submitResultCodex}
+            <AssignmentIcon />
+            &nbsp;code explanation: <br />
+            <div style={{ paddingLeft: "30px" }}>{submitResultCodex}</div>
             <br />
             <br />
-            useful materials:
+            <AssignmentIcon />
+            &nbsp;useful materials:
             <br />
             {submitResultReference.map((reference) => {
               return (
                 <>
-                  <a href={reference.url} target="blank">
+                  <a
+                    href={reference.url}
+                    target="blank"
+                    style={{ paddingLeft: "30px" }}
+                  >
                     {reference.title}
                   </a>
                   <br />
