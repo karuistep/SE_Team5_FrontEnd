@@ -161,11 +161,45 @@ const Right = (props) => {
     }
   };
 
+  // 표절율을 렌더링하는 함수
+  const handlePlagiarism = () => {
+    if (submitResultPlagiarism <= 0.5) {
+      return (
+        <p
+          style={{
+            position: "absolute",
+            top: "10px",
+            left: "10px",
+            color: "#39C330",
+            fontWeight: "700",
+          }}
+        >
+          표절율: {submitResultPlagiarism * 100}%
+        </p>
+      );
+    } else {
+      return (
+        <p
+          style={{
+            position: "absolute",
+            top: "10px",
+            left: "10px",
+            color: "#FF2300",
+            fontWeight: "700",
+          }}
+        >
+          표절율: {submitResultPlagiarism * 100}%
+        </p>
+      );
+    }
+  };
+
   // 제출결과를 렌더링하는 함수
   const handleSubmitResult = () => {
     if (submitResultPage === 0) {
       return (
         <div className="submitResult1">
+          {handlePlagiarism()}
           <PublishedWithChangesIcon
             type="button"
             style={{ position: "absolute", top: "10px", right: "0" }}
@@ -407,6 +441,7 @@ const Right = (props) => {
       props.submitResult !== {} &&
       props.submitResult.codex_output !== undefined
     ) {
+      console.log("제출결과: ", props.submitResult);
       setSubmitResultCodex(props.submitResult.codex_output);
 
       setSubmitResultMultimetricOutput1(

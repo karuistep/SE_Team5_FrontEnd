@@ -28,6 +28,7 @@ const Left = (props) => {
   const handleVerifyTestcase1 = (event) => {
     runTestcase(props.code, showedTestcase1Input, showedTestcase1Output)
       .then((res) => {
+        console.log("검증결과: ", res.data);
         if (res.data.result == "P") {
           setShowedTestcase1Result("PASS");
           setShowedTestcase1YourOutput("");

@@ -99,7 +99,7 @@
         height: calc(100% - 438px);
         .submitContent1 {
           height: 100%;
-          overflow: scroll;
+          overflow: auto;
         }
 
         .submitContent2 {
@@ -107,7 +107,7 @@
 
         .submitContent3 {
           height: 100%;
-          overflow: scroll;
+          overflow: auto;
         }
       }
     }

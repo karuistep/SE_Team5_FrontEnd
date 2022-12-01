@@ -84,7 +84,7 @@ function App() {
         console.log("최근 문제정보를 가져옵니다: ", res.data);
         setSelectedProblemIndex(Number(res.data.idx) - 1);
         setSelectedProblemID(res.data.problem_id);
-        setSkeletonCode(res.data[0].skeleton);
+        setSkeletonCode(res.data[0][0].skeleton);
         setTestcase(res.data[1]);
         setUserCode(res.data[2]);
       })
@@ -148,6 +148,7 @@ function App() {
       setSelectedCode(0);
       getProblemDetail(0, selectedProblemID)
         .then((res) => {
+          console.log("문제정보 가져오기: ", res.data[0][0].title);
           setSkeletonCode(res.data[0][0].skeleton);
           setTestcase(res.data[1]);
           setUserCode(res.data[2]);

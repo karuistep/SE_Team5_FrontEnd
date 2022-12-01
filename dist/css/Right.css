@@ -92,11 +92,11 @@
 }
 .right3 .right3Content .submitResult1 .submitResult1Content .submitContent1 {
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
 }
 .right3 .right3Content .submitResult1 .submitResult1Content .submitContent3 {
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
 }
 .right3 .right3Content .submitResult2 {
   height: 100%;

@@ -19,17 +19,14 @@
 .left .problem .problemContent {
   height: calc(50% - 30px);
 }
-.left .problem .problemContent .problemContentHeader {
-  margin-bottom: 10px;
-  padding-left: 10px;
-  color: #ffffff;
-  font-weight: 500;
-}
 .left .problem .problemContent .problemContentText {
+  width: 100%;
+  height: 100%;
   padding: 0 15px;
   color: #ffffff;
   font-weight: 500;
   line-height: 40px;
+  overflow: auto;
 }
 .left .problem .problemConstraint {
   height: calc(50% - 30px);
