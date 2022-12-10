@@ -267,7 +267,7 @@ const Center = (props) => {
               disabled={props.submittedWait}
             />
             <div className="centerSavedBox1">
-              <div className="centerSavedBox1Title">code slot</div>
+              <div className="centerSavedBox1Title">Code Slot</div>
               <div
                 class="btn-group"
                 role="group"
@@ -320,7 +320,7 @@ const Center = (props) => {
               </div>
             </div>
             <div className="centerSavedBox2">
-              <div className="centerSavedBox2Title">submitted</div>
+              <div className="centerSavedBox2Title">Submitted</div>
               <div
                 class="btn-group"
                 role="group"
@@ -443,7 +443,7 @@ const Center = (props) => {
               disabled={props.submittedWait}
             />
             <div className="centerSavedBox1">
-              <div className="centerSavedBox1Title">code slot</div>
+              <div className="centerSavedBox1Title">Code Slot</div>
               <div
                 class="btn-group"
                 role="group"
@@ -496,7 +496,7 @@ const Center = (props) => {
               </div>
             </div>
             <div className="centerSavedBox2">
-              <div className="centerSavedBox2Title">submitted</div>
+              <div className="centerSavedBox2Title">Submitted</div>
               <div
                 class="btn-group"
                 role="group"
