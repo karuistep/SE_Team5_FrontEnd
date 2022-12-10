@@ -174,7 +174,7 @@ const Right = (props) => {
             fontWeight: "700",
           }}
         >
-          표절율: {submitResultPlagiarism * 100}%
+          표절율: {submitResultPlagiarism.toFixed(2) * 100}%
         </p>
       );
     } else {
@@ -188,7 +188,7 @@ const Right = (props) => {
             fontWeight: "700",
           }}
         >
-          표절율: {submitResultPlagiarism * 100}%
+          표절율: {submitResultPlagiarism.toFixed(2) * 100}%
         </p>
       );
     }
@@ -206,7 +206,20 @@ const Right = (props) => {
             onClick={handleChangeResultMode}
             disabled={props.submittedWait}
           />
-          <div className="submitResult1Header">제출 결과</div>
+          <div className="submitResult1Header">
+            총점:{" "}
+            {submitResultGradeScore +
+              submitResultMultimetricOutput1 +
+              submitResultMultimetricOutput2 +
+              submitResultMultimetricOutput3 +
+              submitResultMultimetricOutput4 +
+              submitResultPylama1Score +
+              submitResultPylama2Score +
+              submitResultPylama3Score +
+              submitResultPylama4Score +
+              submitResultPylama5Score}
+            점 / 300점
+          </div>
           <div className="submitResult1Graph">
             <BarChart
               width={388}

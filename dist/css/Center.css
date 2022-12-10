@@ -33,10 +33,26 @@
 }
 .center .centerFooter {
   height: 75px;
-  background-color: #34465a;
+  display: flex;
+  align-items: center;
+}
+.center .centerFooter .centerFooter1 {
+  height: 100%;
+  margin-right: 20px;
+  padding: 0 5px;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #34465a;
+}
+.center .centerFooter .centerFooter2 {
+  width: 282px;
+  height: 100%;
+  padding: 0 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #34465a;
 }
 
 .centerEx {

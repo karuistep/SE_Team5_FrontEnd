@@ -39,6 +39,7 @@ function App() {
   const [submittedWait, setSubmittedWait] = useState(0); // 제출이 진행되고 있는 지를 저장하는 변수
   const [codeEditorIsExpand, setCodeEditorIsExpand] = useState(0); // 코드에디터의 확장여부를 저장하는 변수
   const [skeletonCode, setSkeletonCode] = useState(""); // 스켈레톤 코드를 저장하는 변수
+  const [isRecentLoaded, setIsRecentRoaded] = useState(0); // 처음 로드할 때 최근 문제정보를 가져왔는지 저장하는 변수
 
   // 제출 중 로딩 바를 표시해주는 함수
   const handleSpinner = () => {
@@ -68,30 +69,19 @@ function App() {
       .then((res) => {
         setLecture(res.data);
         setSelectedLecture(0);
+        if (!isRecentLoaded) {
+          getRecentProblem(0)
+            .then((res) => {
+              setSelectedLecture(res.data[0][0].lecture);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-
-  // 처음 로드할 때 사용자가 마지막으로 풀었던 문제정보를 가져온다
-  useEffect(() => {
-    setCenterSection(1);
-    setRightSection(1);
-    setSelectedCode(0);
-    getRecentProblem(0)
-      .then((res) => {
-        console.log("최근 문제정보를 가져옵니다: ", res.data);
-        setSelectedProblemIndex(Number(res.data.idx) - 1);
-        setSelectedProblemID(res.data.problem_id);
-        setSkeletonCode(res.data[0][0].skeleton);
-        setTestcase(res.data[1]);
-        setUserCode(res.data[2]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    setCodeEditorIsExpand(0);
   }, []);
 
   // 선택된 강의 ID가 변경되었을 때 해당 강의 아래에 있는 과제 목록을 가져온다
@@ -104,6 +94,16 @@ function App() {
           setAssignment(res.data);
           setSelectedAssignmentID(res.data[0].assignment_id);
           setSelectedAssignmentIndex(0);
+          if (!isRecentLoaded) {
+            getRecentProblem(0)
+              .then((res) => {
+                setSelectedAssignmentID(res.data[0][0].assignment);
+                setSelectedAssignmentIndex(res.data[0][0].assignment % 2);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -129,14 +129,26 @@ function App() {
       )
         .then((res) => {
           setProblem(res.data);
-          setSelectedProblemID(res.data[0].problem_id);
-          setSelectedProblemIndex(0);
+          if (isRecentLoaded) {
+            setSelectedProblemID(res.data[0].problem_id);
+            setSelectedProblemIndex(0);
+          } else {
+            getRecentProblem(0)
+              .then((res) => {
+                setSelectedProblemID(res.data[0][0].problem_id);
+                setSelectedProblemIndex(res.data[0][0].idx - 1);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+            setIsRecentRoaded(1);
+          }
         })
         .catch((err) => {
           console.log(err);
         });
-      setCodeEditorIsExpand(0);
     }
+    setCodeEditorIsExpand(0);
   }, [assignment, selectedAssignmentIndex]);
 
   // 문제가 변경되었을 때 선택된 문제 ID를 업데이트하고 테스트케이스, 사용자 입력 코드를 업데이트한다.
@@ -148,10 +160,12 @@ function App() {
       setSelectedCode(0);
       getProblemDetail(0, selectedProblemID)
         .then((res) => {
-          console.log("문제정보 가져오기: ", res.data);
           setSkeletonCode(res.data[0][0].skeleton);
           setTestcase(res.data[1]);
           setUserCode(res.data[2]);
+          setIsSubmitted1(false);
+          setIsSubmitted2(false);
+          setIsSubmitted3(false);
         })
         .catch((err) => {
           console.log(err);
@@ -162,14 +176,18 @@ function App() {
 
   // 코드 제출하였을 때 문제정보를 한번 더 가져와서 제출코드를 업데이트한다.
   useEffect(() => {
-    getProblemDetail(0, selectedProblemID)
-      .then((res) => {
-        console.log("문제정보 가져오기: ", res.data);
-        setUserCode(res.data[2]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (isRecentLoaded) {
+      getProblemDetail(0, selectedProblemID)
+        .then((res) => {
+          setUserCode(res.data[2]);
+          setIsSubmitted1(false);
+          setIsSubmitted2(false);
+          setIsSubmitted3(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, [rightSection]);
 
   // 선택 코드슬롯이 변경되었을 때 현재 코드 변경 및 제출코드 블락 설정
@@ -239,6 +257,7 @@ function App() {
             setCenterSection={setCenterSection}
             setCode={setCode}
             setUserCode={setUserCode}
+            setSelectedProblemID={setSelectedProblemID}
             setSelectedCode={setSelectedCode}
             setCodeIsSaved={setCodeIsSaved}
             setRightSection={setRightSection}
@@ -248,6 +267,9 @@ function App() {
             setGradeResult={setGradeResult}
             setSubmitResult={setSubmitResult}
             setSubmittedWait={setSubmittedWait}
+            setIsSubmitted1={setIsSubmitted1}
+            setIsSubmitted2={setIsSubmitted2}
+            setIsSubmitted3={setIsSubmitted3}
             setCodeEditorIsExpand={setCodeEditorIsExpand}
           />
           <Right

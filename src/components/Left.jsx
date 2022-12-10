@@ -31,7 +31,7 @@ const Left = (props) => {
         console.log("검증결과: ", res.data);
         if (res.data.result == "P") {
           setShowedTestcase1Result("PASS");
-          setShowedTestcase1YourOutput("");
+          setShowedTestcase1YourOutput(res.data.output);
         } else {
           setShowedTestcase1Result("FAIL");
           setShowedTestcase1YourOutput(res.data.output);
@@ -47,7 +47,7 @@ const Left = (props) => {
       .then((res) => {
         if (res.data.result == "P") {
           setShowedTestcase2Result("PASS");
-          setShowedTestcase2YourOutput("");
+          setShowedTestcase2YourOutput(res.data.output);
         } else {
           setShowedTestcase2Result("FAIL");
           setShowedTestcase2YourOutput(res.data.output);

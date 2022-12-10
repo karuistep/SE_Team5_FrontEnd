@@ -25,6 +25,8 @@ const Center = (props) => {
   // 제출 후 받은 정답 코드를 임시 저장하는 변수
   const [solutionCode, setSolutionCode] = useState("");
 
+  const [tempCode, setTempCode] = useState("");
+
   const handleSaveCode = () => {
     // 코드를 슬롯에 저장하는 API요청. 저장 후 getProblemDetail을 실행
     saveCodeInDB(
@@ -159,9 +161,32 @@ const Center = (props) => {
       });
   };
 
-  // 코드 제출
+  // 코드 제출할 경우 코드를 저장하고 제출한다
   const handleSubmitCode = () => {
     props.setSubmittedWait(1);
+
+    // 먼저 코드를 저장
+    saveCodeInDB(
+      props.selectedProblemID,
+      0,
+      props.code,
+      Number(props.selectedCode) + 1
+    )
+      .then((res) => {
+        getProblemDetail(0, props.selectedProblemID)
+          .then((res) => {
+            console.log("문제정보 가져오기 :", res.data);
+            props.setUserCode(res.data[2]);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // 이후 코드를 제출한다
     submitCode(
       props.selectedProblemID,
       0,
@@ -176,11 +201,23 @@ const Center = (props) => {
         } else {
           setSolutionCode(res.data.solution_code);
           props.setCodeEditorIsExpand(0);
-          props.setCenterSection(2);
+          if (props.isSubmitted2) {
+            props.setCenterSection(2);
+          }
           props.setRightSection(3);
           props.setSubmitResult(res.data);
         }
         props.setSubmittedWait(0);
+      })
+      .then(() => {
+        getProblemDetail(0, props.selectedProblemID)
+          .then((res) => {
+            console.log("문제정보 가져오기 :", res.data);
+            props.setUserCode(res.data[2]);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -214,6 +251,8 @@ const Center = (props) => {
     props.setCenterSection(1);
     props.setRightSection(1);
   };
+
+  console.log("현재 유저코드: ", props.userCode);
 
   if (props.centerSection == 1) {
     if (props.codeEditorIsExpand == 0) {
@@ -289,7 +328,7 @@ const Center = (props) => {
               >
                 <button
                   type="button"
-                  class="btn btn-outline-secondary"
+                  class="btn btn-secondary"
                   value={0}
                   disabled={!props.isSubmitted1 || props.submittedWait}
                   onClick={handleLoadSubmitCode}
@@ -298,7 +337,7 @@ const Center = (props) => {
                 </button>
                 <button
                   type="button"
-                  class="btn btn-outline-secondary"
+                  class="btn btn-secondary"
                   value={1}
                   disabled={!props.isSubmitted2 || props.submittedWait}
                   onClick={handleLoadSubmitCode}
@@ -307,7 +346,7 @@ const Center = (props) => {
                 </button>
                 <button
                   type="button"
-                  class="btn btn-outline-secondary"
+                  class="btn btn-secondary"
                   value={2}
                   disabled={!props.isSubmitted3 || props.submittedWait}
                   onClick={handleLoadSubmitCode}
@@ -334,57 +373,61 @@ const Center = (props) => {
             <CodeEditor code={props.code} setCode={props.setCode} />
           </div>
           <div className="centerFooter">
-            <FolderIcon
-              type="button"
-              style={{ marginRight: "10px", color: "#FFFFFF" }}
-              onClick={handleLoadCode}
-              disabled={props.submittedWait}
-            />
-            <RefreshIcon
-              type="button"
-              style={{ marginRight: "10px", color: "#FFFFFF" }}
-              onClick={handleRefreshCode}
-              disabled={props.submittedWait}
-            />
-            <FileCopyIcon
-              type="button"
-              style={{ marginRight: "10px", color: "#FFFFFF" }}
-              onClick={handleCopyCode}
-              disabled={props.submittedWait}
-            />
-            <SimCardDownloadIcon
-              type="button"
-              style={{ marginRight: "10px", color: "#FFFFFF" }}
-              onClick={handleDownloadCode}
-              disabled={props.submittedWait}
-            />
-            <Button
-              variant="secondary"
-              style={{
-                marginRight: "10px",
-              }}
-              onClick={handleExecuteCode}
-              disabled={props.submittedWait}
-            >
-              Execute
-            </Button>
-            <Button
-              variant="secondary"
-              style={{
-                marginRight: "10px",
-              }}
-              onClick={handleGradeCode}
-              disabled={props.submittedWait}
-            >
-              Score
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={handleSubmitCode}
-              disabled={props.submittedWait}
-            >
-              Submit
-            </Button>
+            <div className="centerFooter1">
+              <FolderIcon
+                type="button"
+                style={{ marginRight: "5px", color: "#FFFFFF" }}
+                onClick={handleLoadCode}
+                disabled={props.submittedWait}
+              />
+              <RefreshIcon
+                type="button"
+                style={{ marginRight: "5px", color: "#FFFFFF" }}
+                onClick={handleRefreshCode}
+                disabled={props.submittedWait}
+              />
+              <FileCopyIcon
+                type="button"
+                style={{ marginRight: "5px", color: "#FFFFFF" }}
+                onClick={handleCopyCode}
+                disabled={props.submittedWait}
+              />
+              <SimCardDownloadIcon
+                type="button"
+                style={{ color: "#FFFFFF" }}
+                onClick={handleDownloadCode}
+                disabled={props.submittedWait}
+              />
+            </div>
+            <div className="centerFooter2">
+              <Button
+                variant="secondary"
+                style={{
+                  marginRight: "10px",
+                }}
+                onClick={handleExecuteCode}
+                disabled={props.submittedWait}
+              >
+                Execute
+              </Button>
+              <Button
+                variant="secondary"
+                style={{
+                  marginRight: "10px",
+                }}
+                onClick={handleGradeCode}
+                disabled={props.submittedWait}
+              >
+                Score
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={handleSubmitCode}
+                disabled={props.submittedWait}
+              >
+                Submit
+              </Button>
+            </div>
           </div>
         </div>
       );
