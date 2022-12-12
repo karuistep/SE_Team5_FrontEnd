@@ -136,6 +136,7 @@ const Center = (props) => {
     props.setRightSection(1);
     executeCode(props.code)
       .then((res) => {
+        console.log(res.data);
         props.setExecuteResult(res.data.success);
         props.setExecuteMessage(res.data.message);
         if (!res.data.success) {
